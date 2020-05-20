@@ -1,10 +1,12 @@
 import Vue from 'vue';
+// Buefy modules
 import Buefy from 'buefy';
 import 'buefy/dist/buefy.css';
+// custom modules
 import App from './App.vue';
 import store from './store';
 
-
+// Buefy
 Vue.use(Buefy, {
   defaultIconPack: 'fas',
   defaultContainerElement: '#content',
