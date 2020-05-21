@@ -32,13 +32,11 @@
             <td data-label="官品" class="has-text-centered">{{ grades[member.grade] }}</td>
             <td data-label="名字" class="has-text-centered">{{ member.name }}</td>
             <td data-label="功能" class="is-center has-text-centered">
-              <button type="button" class="button mr-0-5 is-primary is-outlined"
+              <button type="button" class="button mr-0-5 is-primary is-outlined fas fa-pen"
                       @click.prevent='showDialogToEditMember(member)'>
-                修改
               </button>
-              <button type="button" class="button is-danger is-outlined"
+              <button type="button" class="button is-danger is-outlined fas fa-trash"
                       @click.prevent='deleteMember(member)'>
-                刪除
               </button>
             </td>
           </tr>
