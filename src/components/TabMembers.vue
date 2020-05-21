@@ -1,10 +1,44 @@
 <template>
   <div>
-    <div>成員</div>
-    <button class="button is-primary"
+    <button class="button is-primary space-top space-bottom"
         @click="showDialog = true">
         新增成員
     </button>
+    <!-- member list -->
+    <div class="table-wrapper has-mobile-cards">
+      <table class="table is-striped is-narrow is-hoverable">
+        <thead>
+          <tr>
+            <th class style="width: 4rem;">
+              <div class="th-wrap is-center">可開</div>
+            </th>
+            <th class style="width: 4rem;">
+              <div class="th-wrap is-center">官品</div>
+            </th>
+            <th>
+              <div class="th-wrap is-center">名字</div>
+            </th>
+            <th class style="width: 10rem;">
+              <div class="th-wrap is-center">功能</div>
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr draggable="false" v-for='member in members' :key=member.id
+              class='flex-center'>
+            <td data-label="可開" class="flex-center has-text-centered">
+              <b-checkbox style='padding: 0' v-model='member.beTeacher' disabled></b-checkbox>
+            </td>
+            <td data-label="官品" class="has-text-centered">{{ grades[member.grade] }}</td>
+            <td data-label="名字" class="has-text-centered">{{ member.name }}</td>
+            <td data-label="功能" class="is-center has-text-centered">
+              <button type="button" class="button mr-0-5 is-primary is-outlined">修改</button>
+              <button type="button" class="button is-danger is-outlined">刪除</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
     <!-- dialog -->
     <b-modal :active.sync="showDialog"
               has-modal-card
@@ -12,7 +46,7 @@
               :destroy-on-hide="false"
               aria-role="dialog"
               aria-modal>
-        <div class="modal-card" style="width: auto">
+        <div class="modal-card">
           <header class="modal-card-head padding-0-8">
             <p class="modal-card-title text-bold">新增成員</p>
           </header>
@@ -135,16 +169,34 @@ export default {
 </script>
 
 <style lang='scss'>
+.table {
+  margin: 0 auto;
+}
+.table th, .table td {
+  vertical-align: middle;
+}
 .is-left {
   text-align: left;
 }
+.is-center {
+  text-align: center !important;
+}
 .flex-sb {
   justify-content: space-between;
+}
+.mr-0-5 {
+  margin-right: 0.5rem;
 }
 .text-bold {
   font-weight: bold;
 }
 .padding-0-8 {
   padding: 0.8rem;
+}
+.space-top {
+  margin-top: 1rem;
+}
+.space-bottom {
+  margin-bottom: 1rem;
 }
 </style>
