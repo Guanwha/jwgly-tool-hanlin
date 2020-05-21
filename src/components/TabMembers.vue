@@ -1,7 +1,7 @@
 <template>
   <div>
     <button class="button is-primary space-top space-bottom"
-        @click="showDialog = true">
+        @click="showDialogToCreateMember">
         新增成員
     </button>
     <!-- member list -->
@@ -32,7 +32,10 @@
             <td data-label="官品" class="has-text-centered">{{ grades[member.grade] }}</td>
             <td data-label="名字" class="has-text-centered">{{ member.name }}</td>
             <td data-label="功能" class="is-center has-text-centered">
-              <button type="button" class="button mr-0-5 is-primary is-outlined">修改</button>
+              <button type="button" class="button mr-0-5 is-primary is-outlined"
+                      @click.prevent='showDialogToEditMember(member)'>
+                修改
+              </button>
               <button type="button" class="button is-danger is-outlined">刪除</button>
             </td>
           </tr>
@@ -52,18 +55,16 @@
           </header>
           <section class="modal-card-body">
             <b-field label="名字" class='is-left'>
-              <b-input v-model="newMember.name" required></b-input>
+              <b-input v-model="curMember.name" required></b-input>
             </b-field>
             <b-field label="官品" class='is-left'>
               <b-dropdown
-                scrollable.number=true
-                max-height="600"
-                v-model.number="newMember.grade"
+                v-model.number="curMember.grade"
                 aria-role="list"
               >
                 <button class="button is-primary" type="button" slot="trigger">
                   <template>
-                    <span>{{grades[newMember.grade]}}</span>
+                    <span>{{grades[curMember.grade]}}</span>
                   </template>
                   <b-icon icon="caret-down"></b-icon>
                 </button>
@@ -80,12 +81,19 @@
               </b-dropdown>
             </b-field>
             <div class="field is-left" style='padding-top: 0.8rem'>
-                <b-checkbox v-model="newMember.beTeacher">是否可以開桌</b-checkbox>
+                <b-checkbox v-model="curMember.beTeacher">是否可以開桌</b-checkbox>
             </div>
           </section>
           <footer class="modal-card-foot flex-sb padding-0-8">
             <button class="button" type="button" @click.prevent="cancel">取消</button>
-            <button class="button is-primary" @click.prevent='createMember'>新增</button>
+            <button class="button is-primary"
+                    v-if='isCreate' @click.prevent='createMember'>
+              新增
+            </button>
+            <button class="button is-primary"
+                    v-else @click.prevent='updateMember'>
+              更新
+            </button>
           </footer>
         </div>
     </b-modal>
@@ -97,6 +105,13 @@
 import firebase from '@/js/firebase';
 import { grades } from '@/js/constants';
 
+const initMember = {
+  name: '',
+  grade: 103,
+  beTeacher: false,
+  timestamp: null,
+};
+
 export default {
   data() {
     return {
@@ -104,9 +119,10 @@ export default {
       membersObj: null,
       members: [],
       showDialog: false,
-      newMember: {
+      isCreate: true,
+      curMember: {
         name: '',
-        grade: 14,
+        grade: 103,
         beTeacher: false,
         timestamp: null,
       },
@@ -130,20 +146,46 @@ export default {
           };
         });
         // sort by grade
-        this.members.sort((a, b) => b.level - a.level);
+        this.members.sort((a, b) => a.grade - b.grade);
       });
+    },
+    showDialogToCreateMember() {
+      this.curMember = { ...initMember };
+      this.showDialog = true;
+      this.isCreate = true;
+    },
+    showDialogToEditMember(member) {
+      this.curMember = { ...member };
+      this.showDialog = true;
+      this.isCreate = false;
     },
     createMember() {
       // check exist
-      const index = this.members.findIndex((member) => (this.newMember.name === member.name));
+      const index = this.members.findIndex((member) => (this.curMember.name === member.name));
       if (index >= 0) {
         this.danger('此成員已存在');
         return;
       }
       // create member
-      this.refMembers.push(this.newMember);
+      this.refMembers.push(this.curMember);
       this.showDialog = false;
+      this.getMembers();
       this.success('成員新增成功');
+    },
+    updateMember() {
+      // check exist
+      const index = this.members.findIndex((member) => (this.curMember.id === member.id));
+      if (index < 0) {
+        this.danger('此成員不存在');
+        return;
+      }
+      // create member
+      const member = { ...this.curMember };
+      delete member.id;
+      this.refMembers.child(this.curMember.id).set(this.curMember);
+      this.showDialog = false;
+      this.getMembers();
+      this.success('成員編輯成功');
     },
     cancel() {
       this.showDialog = false;
