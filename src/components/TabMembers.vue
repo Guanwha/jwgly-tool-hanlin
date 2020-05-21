@@ -36,7 +36,10 @@
                       @click.prevent='showDialogToEditMember(member)'>
                 修改
               </button>
-              <button type="button" class="button is-danger is-outlined">刪除</button>
+              <button type="button" class="button is-danger is-outlined"
+                      @click.prevent='deleteMember(member)'>
+                刪除
+              </button>
             </td>
           </tr>
         </tbody>
@@ -186,6 +189,18 @@ export default {
       this.showDialog = false;
       this.getMembers();
       this.success('成員編輯成功');
+    },
+    deleteMember(willDeleteMember) {
+      // check exist
+      const index = this.members.findIndex((member) => (willDeleteMember.id === member.id));
+      if (index < 0) {
+        this.danger('此成員不存在');
+        return;
+      }
+      // delete member
+      this.refMembers.child(willDeleteMember.id).remove();
+      this.getMembers();
+      this.success('成員已刪除');
     },
     cancel() {
       this.showDialog = false;
