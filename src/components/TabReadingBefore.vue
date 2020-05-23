@@ -18,6 +18,14 @@
         </button>
       </div>
     </div>
+    <!-- readme -->
+    <hr>
+    <div class='readme'>
+      <div>顏色說明：</div>
+      <div><button class='button'></button><span>未讀</span></div>
+      <div><button class='button is-danger'></button><span>已讀</span></div>
+      <div><button class='button is-warning'></button><span>未下課</span></div>
+    </div>
   </div>
 </template>
 
@@ -47,6 +55,19 @@ export default {
       height: 2rem;
       font-weight: bold;
     }
+  }
+}
+.readme {
+  width: 50%;
+  margin: 0 auto;
+  div {
+    margin: 0.5rem;
+    display: flex;
+    align-items: center;
+  }
+  button {
+    width: 30%;
+    margin-right: 0.5rem;
   }
 }
 </style>
