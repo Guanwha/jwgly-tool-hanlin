@@ -44,10 +44,11 @@
       </table>
     </div>
     <!-- dialog -->
-    <b-modal :active.sync="showDialog"
+    <b-modal :active="showDialog"
               has-modal-card
               trap-focus
               :destroy-on-hide="false"
+              @close="closeDialog"
               aria-role="dialog"
               aria-modal>
         <div class="modal-card">
@@ -88,11 +89,11 @@
           <footer class="modal-card-foot flex-sb padding-0-8">
             <button class="button" type="button" @click.prevent="cancel">取消</button>
             <button class="button is-primary"
-                    v-if='isCreate' @click.prevent='createMember'>
+                    v-if='isCreate' @click.prevent='createMember(curMember)'>
               新增
             </button>
             <button class="button is-primary"
-                    v-else @click.prevent='updateMember'>
+                    v-else @click.prevent='updateMember(curMember)'>
               更新
             </button>
           </footer>
@@ -103,8 +104,9 @@
 
 <script>
 // import * as firebase from 'firebase/app';
-import firebase from '@/js/firebase';
+// import firebase from '@/js/firebase';
 import { grades } from '@/js/constants';
+import { mapActions, mapGetters } from 'vuex';
 
 const initMember = {
   name: '',
@@ -116,10 +118,9 @@ const initMember = {
 export default {
   data() {
     return {
-      refMembers: null,
-      membersObj: null,
-      members: [],
-      showDialog: false,
+      // refMembers: null,
+      // members: [],
+      // showDialog: false,
       isCreate: true,
       curMember: {
         name: '',
@@ -131,94 +132,23 @@ export default {
     };
   },
   created() {
-    this.refMembers = firebase.database().ref('/members/');
     this.getMembers();
   },
   methods: {
-    getMembers() {
-      this.refMembers.once('value').then((snapshot) => {
-        const val = snapshot.val();
-        // convert object to array
-        this.members = Object.keys(val).map((key) => {
-          const data = val[key];
-          return {
-            id: key,
-            ...data,
-          };
-        });
-        // sort by grade
-        this.members.sort((a, b) => a.grade - b.grade);
-      });
-    },
     showDialogToCreateMember() {
       this.curMember = { ...initMember };
-      this.showDialog = true;
+      this.openDialog();
       this.isCreate = true;
     },
     showDialogToEditMember(member) {
       this.curMember = { ...member };
-      this.showDialog = true;
+      this.openDialog();
       this.isCreate = false;
     },
-    createMember() {
-      // check exist
-      const index = this.members.findIndex((member) => (this.curMember.name === member.name));
-      if (index >= 0) {
-        this.danger('此成員已存在');
-        return;
-      }
-      // create member
-      this.refMembers.push(this.curMember);
-      this.showDialog = false;
-      this.getMembers();
-      this.success('成員新增成功');
-    },
-    updateMember() {
-      // check exist
-      const index = this.members.findIndex((member) => (this.curMember.id === member.id));
-      if (index < 0) {
-        this.danger('此成員不存在');
-        return;
-      }
-      // create member
-      const member = { ...this.curMember };
-      delete member.id;
-      this.refMembers.child(this.curMember.id).set(this.curMember);
-      this.showDialog = false;
-      this.getMembers();
-      this.success('成員編輯成功');
-    },
-    deleteMember(willDeleteMember) {
-      // check exist
-      const index = this.members.findIndex((member) => (willDeleteMember.id === member.id));
-      if (index < 0) {
-        this.danger('此成員不存在');
-        return;
-      }
-      // delete member
-      this.refMembers.child(willDeleteMember.id).remove();
-      this.getMembers();
-      this.success('成員已刪除');
-    },
-    cancel() {
-      this.showDialog = false;
-    },
-    success(msg) {
-      this.$buefy.toast.open({
-        duration: 3000,
-        message: msg,
-        position: 'is-bottom',
-        type: 'is-success',
-      });
-    },
-    danger(msg) {
-      this.$buefy.toast.open({
-        duration: 3000,
-        message: msg,
-        position: 'is-bottom',
-        type: 'is-danger',
-      });
-    },
+    ...mapActions(['getMembers', 'openDialog', 'createMember', 'updateMember', 'deleteMember', 'closeDialog', 'cancel']),
+  },
+  computed: {
+    ...mapGetters(['members', 'showDialog']),
   },
 };
 </script>
