@@ -63,7 +63,7 @@ export default new Vuex.Store({
       const member = { ...curMember };
       delete member.id;
       const refMember = firebase.database().ref(`/members/${curMember.id}`);
-      refMember.set(curMember);
+      refMember.set(member);
       context.commit('SHOWHIDE_DIALOG', false);
       this.dispatch('getMembers');
       this.dispatch('success', '成員編輯成功');
