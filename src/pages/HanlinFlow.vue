@@ -2,18 +2,27 @@
   <section>
     <b-tabs type="is-boxed" expanded>
       <b-tab-item label="成員" icon="users"><TabMembers/></b-tab-item>
-      <b-tab-item label="讀書前" icon="clipboard-list">讀書前紀錄</b-tab-item>
+      <b-tab-item label="讀書前" icon="clipboard-list"><TabReadingBefore/></b-tab-item>
       <b-tab-item label="讀書中" icon="chalkboard-teacher">讀書中使用</b-tab-item>
     </b-tabs>
   </section>
 </template>
 
 <script>
+import { mapActions } from 'vuex';
 import TabMembers from '@/components/TabMembers.vue';
+import TabReadingBefore from '@/components/TabReadingBefore.vue';
 
 export default {
   components: {
     TabMembers,
+    TabReadingBefore,
+  },
+  created() {
+    this.getMembers();
+  },
+  methods: {
+    ...mapActions(['getMembers']),
   },
 };
 </script>

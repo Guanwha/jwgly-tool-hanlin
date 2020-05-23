@@ -7,10 +7,14 @@ Vue.use(Vuex);
 export default new Vuex.Store({
   strict: true,
   state: {
+    /** access firebase */
     members: [],
     showDialog: false,
+    /** reading setup status */
+    readingSetupStatus: 1, // 0: 未設定/未讀,  1: 設定已讀,  2: 設定未下課
   },
   actions: {
+    /** access firebase */
     getMembers(context) {
       const refMembers = firebase.database().ref('/members/');
       refMembers.once('value').then((snapshot) => {
@@ -55,11 +59,11 @@ export default new Vuex.Store({
         this.dispatch('danger', '此成員不存在');
         return;
       }
-      // create member
+      // update member
       const member = { ...curMember };
       delete member.id;
       const refMember = firebase.database().ref(`/members/${curMember.id}`);
-      refMember.set(curMember);
+      refMember.set(member);
       context.commit('SHOWHIDE_DIALOG', false);
       this.dispatch('getMembers');
       this.dispatch('success', '成員編輯成功');
@@ -81,6 +85,41 @@ export default new Vuex.Store({
     cancel(context) {
       context.commit('SHOWHIDE_DIALOG', false);
     },
+    /** reading setup status */
+    switchReadingSetupOperation(context) {
+      if (context.state.readingSetupStatus === 1) {
+        context.commit('SET_READING_SETUP_STATUS', 2);
+      }
+      else {
+        context.commit('SET_READING_SETUP_STATUS', 1);
+      }
+    },
+    switchReadingStatus(context, curMember) {
+      // check exist
+      const index = context.state.members.findIndex((member) => (curMember.id === member.id));
+      if (index < 0) {
+        this.dispatch('danger', '此成員不存在');
+        return;
+      }
+      // switch member's reading status
+      const member = { ...curMember };
+      delete member.id;
+      if (context.state.readingSetupStatus === 1) {
+        // 已讀的切換
+        member.readingStatus = (!member.readingStatus || member.readingStatus === 2) ? 1 : 0;
+      }
+      else {
+        // 未下課的切換
+        member.readingStatus = (!member.readingStatus || member.readingStatus === 1) ? 2 : 0;
+      }
+
+      // update to firebase
+      const refMember = firebase.database().ref(`/members/${curMember.id}`);
+      refMember.set(member);
+      this.dispatch('getMembers');
+      this.dispatch('success', '切換成員讀書狀態成功');
+    },
+    /** toast */
     success(context, msg) {
       Vue.prototype.$buefy.toast.open({
         duration: 3000,
@@ -99,16 +138,24 @@ export default new Vuex.Store({
     },
   },
   mutations: {
+    /** access firebase */
     SET_MEMBERS(state, members) {
       state.members = members;
     },
     SHOWHIDE_DIALOG(state, status) {
       state.showDialog = status;
     },
+    /** reading setup status */
+    SET_READING_SETUP_STATUS(state, status) {
+      state.readingSetupStatus = status;
+    },
   },
   getters: {
+    /** access firebase */
     members(state) { return state.members; },
     showDialog(state) { return state.showDialog; },
+    /** reading setup status */
+    readingSetupStatus(state) { return state.readingSetupStatus; },
   },
   modules: {
   },

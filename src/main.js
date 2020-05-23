@@ -5,6 +5,7 @@ import 'buefy/dist/buefy.css';
 // custom modules
 import App from './App.vue';
 import store from './store';
+import './styles/customBuefy.scss';
 
 // Buefy
 Vue.use(Buefy, {
