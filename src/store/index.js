@@ -7,8 +7,11 @@ Vue.use(Vuex);
 export default new Vuex.Store({
   strict: true,
   state: {
+    /** access firebase */
     members: [],
     showDialog: false,
+    /** reading setup status */
+    readingSetupStatus: 0, // 0: 設定已讀,  1: 設定未下課
   },
   actions: {
     /** access firebase */
@@ -82,6 +85,15 @@ export default new Vuex.Store({
     cancel(context) {
       context.commit('SHOWHIDE_DIALOG', false);
     },
+    /** reading setup status */
+    switchReadingSetupOperation(context) {
+      if (context.state.readingSetupStatus === 0) {
+        context.commit('SET_READING_SETUP_STATUS', 1);
+      }
+      else {
+        context.commit('SET_READING_SETUP_STATUS', 0);
+      }
+    },
     /** toast */
     success(context, msg) {
       Vue.prototype.$buefy.toast.open({
@@ -101,16 +113,24 @@ export default new Vuex.Store({
     },
   },
   mutations: {
+    /** access firebase */
     SET_MEMBERS(state, members) {
       state.members = members;
     },
     SHOWHIDE_DIALOG(state, status) {
       state.showDialog = status;
     },
+    /** reading setup status */
+    SET_READING_SETUP_STATUS(state, status) {
+      state.readingSetupStatus = status;
+    },
   },
   getters: {
+    /** access firebase */
     members(state) { return state.members; },
     showDialog(state) { return state.showDialog; },
+    /** reading setup status */
+    readingSetupStatus(state) { return state.readingSetupStatus; },
   },
   modules: {
   },
