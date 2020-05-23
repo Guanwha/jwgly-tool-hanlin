@@ -1,7 +1,7 @@
 <template>
   <div>
     <button class="button space-top space-bottom"
-            :class="[(readingSetupStatus === 1) ? 'is-danger' : 'is-warning']"
+            :class="[(readingSetupStatus === 1) ? 'is-black' : 'is-primary']"
             @click.prevent='switchReadingSetupOperation()'>
         切換 已讀/未下課
     </button>
@@ -12,7 +12,7 @@
       <div class="cell" v-for='member in members' :key='member.id'>
         <button class='button'
                 :class="[(!member.readingStatus) ? '' :
-                         (member.readingStatus === 1) ? 'is-danger' : 'is-warning']"
+                         (member.readingStatus === 1) ? 'is-black' : 'is-primary']"
                 @click.prevent='switchReadingStatus(member)'>
           {{ member.name }}
         </button>
@@ -23,8 +23,8 @@
     <div class='readme'>
       <div>顏色說明：</div>
       <div><button class='button'></button><span>未讀</span></div>
-      <div><button class='button is-danger'></button><span>已讀</span></div>
-      <div><button class='button is-warning'></button><span>未下課</span></div>
+      <div><button class='button is-black'></button><span>已讀</span></div>
+      <div><button class='button is-primary'></button><span>未下課</span></div>
     </div>
   </div>
 </template>
