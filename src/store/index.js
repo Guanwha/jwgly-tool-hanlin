@@ -11,6 +11,7 @@ export default new Vuex.Store({
     showDialog: false,
   },
   actions: {
+    /** access firebase */
     getMembers(context) {
       const refMembers = firebase.database().ref('/members/');
       refMembers.once('value').then((snapshot) => {
@@ -81,6 +82,7 @@ export default new Vuex.Store({
     cancel(context) {
       context.commit('SHOWHIDE_DIALOG', false);
     },
+    /** toast */
     success(context, msg) {
       Vue.prototype.$buefy.toast.open({
         duration: 3000,

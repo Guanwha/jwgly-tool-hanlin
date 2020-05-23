@@ -103,8 +103,6 @@
 </template>
 
 <script>
-// import * as firebase from 'firebase/app';
-// import firebase from '@/js/firebase';
 import { grades } from '@/js/constants';
 import { mapActions, mapGetters } from 'vuex';
 
@@ -118,9 +116,6 @@ const initMember = {
 export default {
   data() {
     return {
-      // refMembers: null,
-      // members: [],
-      // showDialog: false,
       isCreate: true,
       curMember: {
         name: '',
@@ -130,9 +125,6 @@ export default {
       },
       grades,
     };
-  },
-  created() {
-    this.getMembers();
   },
   methods: {
     showDialogToCreateMember() {
@@ -145,7 +137,7 @@ export default {
       this.openDialog();
       this.isCreate = false;
     },
-    ...mapActions(['getMembers', 'openDialog', 'createMember', 'updateMember', 'deleteMember', 'closeDialog', 'cancel']),
+    ...mapActions(['openDialog', 'createMember', 'updateMember', 'deleteMember', 'closeDialog', 'cancel']),
   },
   computed: {
     ...mapGetters(['members', 'showDialog']),

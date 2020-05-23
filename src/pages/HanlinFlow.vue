@@ -9,11 +9,18 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex';
 import TabMembers from '@/components/TabMembers.vue';
 
 export default {
   components: {
     TabMembers,
+  },
+  created() {
+    this.getMembers();
+  },
+  methods: {
+    ...mapActions(['getMembers']),
   },
 };
 </script>
