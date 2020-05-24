@@ -122,6 +122,17 @@ export default new Vuex.Store({
       this.dispatch('getMembers');
       this.dispatch('success', '切換成員讀書狀態成功');
     },
+    finishReadingStatus(context, ids) {
+      // prepare firebase link
+      const refMembers = firebase.database().ref('/members/');
+      // update to firebase
+      ids.forEach((id) => {
+        const curMember = context.state.members.find((member) => (member.id === id));
+        curMember.readingStatus = 1; // 設定為已讀
+        refMembers.child(`${curMember.id}`).set(curMember);
+      });
+      this.dispatch('success', '切換成員讀書狀態成功');
+    },
     /** toast */
     success(context, msg) {
       Vue.prototype.$buefy.toast.open({

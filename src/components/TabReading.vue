@@ -3,13 +3,12 @@
     <!-- read status table -->
     <div class='block-header has-background-white-ter'>
       <div class='is-left has-text-weight-bold'>未讀：</div>
-      <button class="button is-dark">送出已讀人員</button>
+      <button class="button is-dark" @click.prevent='finishReadingStatus(haveReadList)'>送出已讀人員</button>
     </div>
     <ul class='table-reading'>
       <li class="cell" v-for='member in membersNeedRead' :key='member.id'>
-        <button class='button'
-                :class="[(!member.readingStatus) ? '' :
-                         (member.readingStatus === 1) ? 'is-dark' : 'is-primary']">
+        <button class='button' :class="{ 'is-dark': isSelected(member.id) }"
+                @click.prevent='addToHaveReadList(member.id)'>
           {{ grades[member.grade] }} {{ member.name }}
         </button>
       </li>
@@ -45,7 +44,19 @@ export default {
     };
   },
   methods: {
-    ...mapActions(['switchReadingSetupOperation', 'switchReadingStatus']),
+    isSelected(curID) {
+      return this.haveReadList.findIndex((id) => id === curID) >= 0;
+    },
+    addToHaveReadList(curID) {
+      const idx = this.haveReadList.findIndex((id) => id === curID);
+      if (idx >= 0) {
+        this.haveReadList.splice(idx, 1);
+      }
+      else {
+        this.$set(this.haveReadList, this.haveReadList.length, curID);
+      }
+    },
+    ...mapActions(['switchReadingSetupOperation', 'switchReadingStatus', 'finishReadingStatus']),
   },
   computed: {
     ...mapGetters(['readingSetupStatus', 'members', 'membersNeedRead']),
