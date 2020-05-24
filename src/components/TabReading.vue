@@ -10,6 +10,7 @@
         <button class='button' :class="{ 'is-dark': isSelected(member.id) }"
                 @click.prevent='addToHaveReadList(member.id)'>
           {{ grades[member.grade] }} {{ member.name }}
+          <span v-if='member.beTeacher' class='has-text-danger ml-0-5'>可開</span>
         </button>
       </li>
     </ul>
@@ -72,6 +73,9 @@ export default {
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
+}
+.ml-0-5 {
+  margin-left: 0.5rem;
 }
 .mr-0-5 {
   margin-right: 0.5rem;
