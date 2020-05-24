@@ -12,6 +12,9 @@ export default new Vuex.Store({
     showDialog: false,
     /** reading setup status */
     readingSetupStatus: 1, // 0: 未設定/未讀,  1: 設定已讀,  2: 設定未下課
+    /** reading process */
+    membersNeedRead: [],
+    membersInClass: [],
   },
   actions: {
     /** access firebase */
@@ -156,6 +159,16 @@ export default new Vuex.Store({
     showDialog(state) { return state.showDialog; },
     /** reading setup status */
     readingSetupStatus(state) { return state.readingSetupStatus; },
+    /** reading process */
+    membersNeedRead(state) {
+      const filteredMembers = [];
+      state.members.forEach((element) => {
+        if (!element.readingStatus || element.readingStatus === 0) {
+          filteredMembers.push(element);
+        }
+      });
+      return filteredMembers;
+    },
   },
   modules: {
   },
