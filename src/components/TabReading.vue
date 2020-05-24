@@ -1,27 +1,37 @@
 <template>
   <div>
-    <!-- read status table -->
+    <!-- members in wating list -->
     <div class='block-header has-background-white-ter'>
       <div class='is-left has-text-weight-bold'>未讀：</div>
       <button class="button is-dark" @click.prevent='finishReadingStatus(haveReadList)'>送出已讀人員</button>
     </div>
     <ul class='table-reading'>
       <li class="cell" v-for='member in membersNeedRead' :key='member.id'>
-        <button class='button' :class="{ 'is-dark': isSelected(member.id) }"
+        <button class='button' :class="{ 'is-dark': isSelectedInWaitingList(member.id) }"
                 @click.prevent='addToHaveReadList(member.id)'>
           {{ grades[member.grade] }} {{ member.name }}
           <span v-if='member.beTeacher' class='has-text-danger ml-0-5'>可開</span>
         </button>
       </li>
     </ul>
+    <!-- members in class -->
     <hr>
     <div class='block-header has-background-white-ter'>
       <div class='is-left has-text-weight-bold'>未下課：</div>
       <div>
-        <button class="button is-primary mr-0-5">一鍵下課 ⇪</button>
-        <button class="button is-dark">下課 ⇪</button>
+        <button class="button mr-0-5">一鍵下課 ⇪</button>
+        <button class="button">下課 ⇪</button>
       </div>
     </div>
+    <ul class='table-reading'>
+      <li class="cell" v-for='member in membersInClass' :key='member.id'>
+        <button class='button' :class="{ 'is-primary': !isSelectedInClassList(member.id) }"
+                @click.prevent='addToNeedReadList(member.id)'>
+          {{ grades[member.grade] }} {{ member.name }}
+          <span v-if='member.beTeacher' class='has-text-danger ml-0-5'>可開</span>
+        </button>
+      </li>
+    </ul>
     <!-- readme -->
     <hr>
     <div class='readme'>
@@ -41,11 +51,12 @@ export default {
   data() {
     return {
       grades,
-      haveReadList: [],
+      haveReadList: [], // these members have read
+      needReadList: [], // these members is after class
     };
   },
   methods: {
-    isSelected(curID) {
+    isSelectedInWaitingList(curID) {
       return this.haveReadList.findIndex((id) => id === curID) >= 0;
     },
     addToHaveReadList(curID) {
@@ -57,10 +68,22 @@ export default {
         this.$set(this.haveReadList, this.haveReadList.length, curID);
       }
     },
+    isSelectedInClassList(curID) {
+      return this.needReadList.findIndex((id) => id === curID) >= 0;
+    },
+    addToNeedReadList(curID) {
+      const idx = this.needReadList.findIndex((id) => id === curID);
+      if (idx >= 0) {
+        this.needReadList.splice(idx, 1);
+      }
+      else {
+        this.$set(this.needReadList, this.needReadList.length, curID);
+      }
+    },
     ...mapActions(['switchReadingSetupOperation', 'switchReadingStatus', 'finishReadingStatus']),
   },
   computed: {
-    ...mapGetters(['readingSetupStatus', 'members', 'membersNeedRead']),
+    ...mapGetters(['readingSetupStatus', 'members', 'membersNeedRead', 'membersInClass']),
   },
 };
 </script>

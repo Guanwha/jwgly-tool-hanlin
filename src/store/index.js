@@ -180,6 +180,15 @@ export default new Vuex.Store({
       });
       return filteredMembers;
     },
+    membersInClass(state) {
+      const filteredMembers = [];
+      state.members.forEach((element) => {
+        if (element.readingStatus === 2) {
+          filteredMembers.push(element);
+        }
+      });
+      return filteredMembers;
+    },
   },
   modules: {
   },
