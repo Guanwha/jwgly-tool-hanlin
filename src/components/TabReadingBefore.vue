@@ -22,8 +22,8 @@
     <hr>
     <div class='readme'>
       <div>顏色說明：</div>
-      <div><button class='button'></button><span>未讀</span></div>
       <div><button class='button is-dark'></button><span>已讀</span></div>
+      <div><button class='button'></button><span>未讀</span></div>
       <div><button class='button is-primary'></button><span>未下課</span></div>
     </div>
   </div>
