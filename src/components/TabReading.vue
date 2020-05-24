@@ -7,7 +7,7 @@
     </div>
     <ul class='table-reading'>
       <li class="cell" v-for='member in membersNeedRead' :key='member.id'>
-        <button class='button' :class="{ 'is-dark': isSelectedInWaitingList(member.id) }"
+        <button class='button text-left' :class="{ 'is-dark': isSelectedInWaitingList(member.id) }"
                 @click.prevent='addToHaveReadList(member.id)'>
           {{ grades[member.grade] }} {{ member.name }}
           <span v-if='member.beTeacher' class='has-text-danger ml-0-5'>可開</span>
@@ -25,7 +25,7 @@
     </div>
     <ul class='table-reading'>
       <li class="cell" v-for='member in membersInClass' :key='member.id'>
-        <button class='button' :class="{ 'is-primary': !isSelectedInClassList(member.id) }"
+        <button class='button text-left' :class="{ 'is-primary': !isSelectedInClassList(member.id) }"
                 @click.prevent='addToNeedReadList(member.id)'>
           {{ grades[member.grade] }} {{ member.name }}
           <span v-if='member.beTeacher' class='has-text-danger ml-0-5'>可開</span>
@@ -89,6 +89,9 @@ export default {
 </script>
 
 <style lang='scss'>
+.text-left {
+  justify-content: flex-start !important;
+}
 .block-header {
   padding: 0.5rem;
   margin-bottom: 0.5rem;
