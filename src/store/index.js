@@ -127,10 +127,12 @@ export default new Vuex.Store({
       const refMembers = firebase.database().ref('/members/');
       // update to firebase
       ids.forEach((id) => {
-        const curMember = context.state.members.find((member) => (member.id === id));
+        const curMember = { ...context.state.members.find((member) => (member.id === id)) };
+        delete curMember.id;
         curMember.readingStatus = 1; // 設定為已讀
-        refMembers.child(`${curMember.id}`).set(curMember);
+        refMembers.child(`${id}`).set(curMember);
       });
+      this.dispatch('getMembers');
       this.dispatch('success', '設定部分成員為已讀');
     },
     finishClassStatus(context, ids) {
@@ -138,10 +140,12 @@ export default new Vuex.Store({
       const refMembers = firebase.database().ref('/members/');
       // update to firebase
       ids.forEach((id) => {
-        const curMember = context.state.members.find((member) => (member.id === id));
+        const curMember = { ...context.state.members.find((member) => (member.id === id)) };
+        delete curMember.id;
         curMember.readingStatus = 0; // 設定為未讀
-        refMembers.child(`${curMember.id}`).set(curMember);
+        refMembers.child(`${id}`).set(curMember);
       });
+      this.dispatch('getMembers');
       this.dispatch('success', '設定部分成員為未讀');
     },
     finishAllClassStatus(context) {
@@ -150,11 +154,14 @@ export default new Vuex.Store({
       // update to firebase
       context.state.members.forEach((member) => {
         const curMember = Object.assign(member);
+        const curID = curMember.id;
         if (curMember.readingStatus === 2) {
+          delete curMember.id;
           curMember.readingStatus = 0; // 設定為未讀
-          refMembers.child(`${curMember.id}`).set(curMember);
+          refMembers.child(`${curID}`).set(curMember);
         }
       });
+      this.dispatch('getMembers');
       this.dispatch('success', '設定所有未下課成員為未讀');
     },
     /** toast */

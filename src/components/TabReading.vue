@@ -3,7 +3,7 @@
     <!-- members in wating list -->
     <div class='block-header has-background-white-ter'>
       <div class='is-left has-text-weight-bold'>未讀：</div>
-      <button class="button is-dark" @click.prevent='finishReadingStatus(haveReadList)'>送出已讀人員</button>
+      <button class="button is-dark" @click.prevent='[finishReadingStatus(haveReadList), clearHaveReadList()]'>送出已讀人員</button>
     </div>
     <ul class='table-reading'>
       <li class="cell" v-for='member in membersNeedRead' :key='member.id'>
@@ -19,8 +19,8 @@
     <div class='block-header has-background-white-ter'>
       <div class='is-left has-text-weight-bold'>未下課：</div>
       <div>
-        <button class="button mr-0-5" @click.prevent='finishAllClassStatus'>一鍵下課 ⇪</button>
-        <button class="button" @click.prevent='finishClassStatus(needReadList)'>下課 ⇪</button>
+        <button class="button mr-0-5" @click.prevent='[finishAllClassStatus(), clearNeedReadList()]'>一鍵下課 ⇪</button>
+        <button class="button" @click.prevent='[finishClassStatus(needReadList), clearNeedReadList()]'>下課 ⇪</button>
       </div>
     </div>
     <ul class='table-reading'>
@@ -68,6 +68,11 @@ export default {
         this.$set(this.haveReadList, this.haveReadList.length, curID);
       }
     },
+    clearHaveReadList() {
+      setTimeout(() => {
+        this.haveReadList = [];
+      }, 100);
+    },
     isSelectedInClassList(curID) {
       return this.needReadList.findIndex((id) => id === curID) >= 0;
     },
@@ -79,6 +84,11 @@ export default {
       else {
         this.$set(this.needReadList, this.needReadList.length, curID);
       }
+    },
+    clearNeedReadList() {
+      setTimeout(() => {
+        this.needReadList = [];
+      }, 100);
     },
     ...mapActions(['switchReadingSetupOperation', 'switchReadingStatus', 'finishReadingStatus', 'finishClassStatus', 'finishAllClassStatus']),
   },
