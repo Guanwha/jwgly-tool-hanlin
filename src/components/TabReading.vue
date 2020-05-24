@@ -19,8 +19,8 @@
     <div class='block-header has-background-white-ter'>
       <div class='is-left has-text-weight-bold'>未下課：</div>
       <div>
-        <button class="button mr-0-5">一鍵下課 ⇪</button>
-        <button class="button">下課 ⇪</button>
+        <button class="button mr-0-5" @click.prevent='finishAllClassStatus'>一鍵下課 ⇪</button>
+        <button class="button" @click.prevent='finishClassStatus(needReadList)'>下課 ⇪</button>
       </div>
     </div>
     <ul class='table-reading'>
@@ -80,7 +80,7 @@ export default {
         this.$set(this.needReadList, this.needReadList.length, curID);
       }
     },
-    ...mapActions(['switchReadingSetupOperation', 'switchReadingStatus', 'finishReadingStatus']),
+    ...mapActions(['switchReadingSetupOperation', 'switchReadingStatus', 'finishReadingStatus', 'finishClassStatus', 'finishAllClassStatus']),
   },
   computed: {
     ...mapGetters(['readingSetupStatus', 'members', 'membersNeedRead', 'membersInClass']),

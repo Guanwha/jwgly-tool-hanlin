@@ -131,7 +131,31 @@ export default new Vuex.Store({
         curMember.readingStatus = 1; // 設定為已讀
         refMembers.child(`${curMember.id}`).set(curMember);
       });
-      this.dispatch('success', '切換成員讀書狀態成功');
+      this.dispatch('success', '設定部分成員為已讀');
+    },
+    finishClassStatus(context, ids) {
+      // prepare firebase link
+      const refMembers = firebase.database().ref('/members/');
+      // update to firebase
+      ids.forEach((id) => {
+        const curMember = context.state.members.find((member) => (member.id === id));
+        curMember.readingStatus = 0; // 設定為未讀
+        refMembers.child(`${curMember.id}`).set(curMember);
+      });
+      this.dispatch('success', '設定部分成員為未讀');
+    },
+    finishAllClassStatus(context) {
+      // prepare firebase link
+      const refMembers = firebase.database().ref('/members/');
+      // update to firebase
+      context.state.members.forEach((member) => {
+        const curMember = Object.assign(member);
+        if (curMember.readingStatus === 2) {
+          curMember.readingStatus = 0; // 設定為未讀
+          refMembers.child(`${curMember.id}`).set(curMember);
+        }
+      });
+      this.dispatch('success', '設定所有未下課成員為未讀');
     },
     /** toast */
     success(context, msg) {
