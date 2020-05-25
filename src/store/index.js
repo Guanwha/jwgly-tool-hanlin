@@ -15,10 +15,13 @@ export default new Vuex.Store({
     /** reading process */
     membersNeedRead: [],
     membersInClass: [],
+    /** ui */
+    isLoading: false,
   },
   actions: {
     /** access firebase */
     getMembers(context) {
+      context.commit('SET_LOADING', true);
       const refMembers = firebase.database().ref('/members/');
       refMembers.once('value').then((snapshot) => {
         const val = snapshot.val();
@@ -33,6 +36,7 @@ export default new Vuex.Store({
         // sort by grade
         members.sort((a, b) => a.grade - b.grade);
         context.commit('SET_MEMBERS', members);
+        context.commit('SET_LOADING', false);
       });
     },
     openDialog(context) {
@@ -140,6 +144,12 @@ export default new Vuex.Store({
     },
     /** reading setup status */
     finishReadingStatus(context, ids) {
+      // check length
+      if (ids.length === 0) {
+        this.dispatch('danger', '請先選擇已讀人員');
+        return;
+      }
+
       // prepare firebase link
       const refMembers = firebase.database().ref('/members/');
       // update to firebase
@@ -153,6 +163,12 @@ export default new Vuex.Store({
       this.dispatch('success', '設定部分成員為已讀');
     },
     finishClassStatus(context, ids) {
+      // check length
+      if (ids.length === 0) {
+        this.dispatch('danger', '請先選擇下課人員');
+        return;
+      }
+
       // prepare firebase link
       const refMembers = firebase.database().ref('/members/');
       // update to firebase
@@ -211,6 +227,10 @@ export default new Vuex.Store({
     SET_READING_SETUP_STATUS(state, status) {
       state.readingSetupStatus = status;
     },
+    /** ui */
+    SET_LOADING(state, status) {
+      state.isLoading = status;
+    },
   },
   getters: {
     /** access firebase */
@@ -237,6 +257,7 @@ export default new Vuex.Store({
       });
       return filteredMembers;
     },
+    isLoading(state) { return state.isLoading; },
   },
   modules: {
   },

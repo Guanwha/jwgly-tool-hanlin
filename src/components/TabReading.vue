@@ -152,6 +152,7 @@ export default {
           }
         });
       }
+      // eslint-disable-next-line
       console.log(msg);
 
       // send to clipboard
