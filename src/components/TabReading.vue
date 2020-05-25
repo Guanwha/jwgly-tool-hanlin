@@ -1,5 +1,10 @@
 <template>
   <div>
+    <!-- copy to clipboard -->
+    <div class='block-header has-background-white-ter'>
+      <div class='is-left has-text-weight-bold'>輸出：</div>
+      <button class="button is-info" @click.prevent='copyMembers'>複製名單</button>
+    </div>
     <!-- members in wating list -->
     <div class='block-header has-background-white-ter'>
       <div class='is-left has-text-weight-bold'>未讀：</div>
@@ -89,12 +94,69 @@ export default {
         this.needReadList = [];
       }, 100);
     },
+    copyMembers() {
+      // prepare message
+      let msg = '';
+      if (this.membersNeedRead.length > 0) {
+        msg += '=== 未讀 ===\n';
+
+        // list 未讀＋可開桌
+        msg += '老師：';
+        this.members.forEach((member) => {
+          if (!member.readingStatus && member.beTeacher) {
+            msg += `${member.name}, `;
+          }
+        });
+        msg += '\n';
+
+        // list 未讀＋不開桌
+        msg += '學生：';
+        this.members.forEach((member) => {
+          if (!member.readingStatus && !member.beTeacher) {
+            msg += `${member.name}, `;
+          }
+        });
+      }
+
+      if (this.membersInClass.length > 0) {
+        msg += '\n\n=== 未下課 ===\n';
+
+        // list 未下課＋可開桌
+        msg += '老師：';
+        this.members.forEach((member) => {
+          if (member.readingStatus === 2 && member.beTeacher) {
+            msg += `${member.name}, `;
+          }
+        });
+        msg += '\n';
+
+        // list 未讀＋不開桌
+        msg += '學生：';
+        this.members.forEach((member) => {
+          if (member.readingStatus === 2 && !member.beTeacher) {
+            msg += `${member.name}, `;
+          }
+        });
+      }
+      console.log(msg);
+
+      // send to clipboard
+      navigator.clipboard.writeText(msg).then(() => {
+        /* clipboard successfully set */
+        this.success('複製 成功');
+      }, () => {
+        /* clipboard write failed */
+        this.danger('複製 失敗');
+      });
+    },
     ...mapActions([
       'switchReadingSetupOperation',
       'switchReadingStatus',
       'finishReadingStatus',
       'finishClassStatus',
       'finishAllClassStatus',
+      'success',
+      'danger',
     ]),
   },
   computed: {

@@ -137,6 +137,7 @@ export default new Vuex.Store({
       this.dispatch('getMembers');
       this.dispatch('success', '切換成員讀書狀態成功');
     },
+    /** reading setup status */
     finishReadingStatus(context, ids) {
       // prepare firebase link
       const refMembers = firebase.database().ref('/members/');
