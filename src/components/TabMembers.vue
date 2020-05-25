@@ -1,6 +1,6 @@
 <template>
   <div>
-    <button class="button is-primary space-top space-bottom"
+    <button class="button is-primary mt-1 mb-1"
         @click="showDialogToCreateMember">
         新增成員
     </button>
@@ -10,16 +10,16 @@
         <thead>
           <tr>
             <th class style="width: 4rem;">
-              <div class="th-wrap is-center">可開</div>
+              <div class="th-wrap has-text-centered">可開</div>
             </th>
             <th class style="width: 4rem;">
-              <div class="th-wrap is-center">官品</div>
+              <div class="th-wrap has-text-centered">官品</div>
             </th>
             <th>
-              <div class="th-wrap is-center">名字</div>
+              <div class="th-wrap has-text-centered">名字</div>
             </th>
             <th class style="width: 10rem;">
-              <div class="th-wrap is-center">功能</div>
+              <div class="th-wrap has-text-centered">功能</div>
             </th>
           </tr>
         </thead>
@@ -31,8 +31,8 @@
             </td>
             <td data-label="官品" class="has-text-centered">{{ grades[member.grade] }}</td>
             <td data-label="名字" class="has-text-centered">{{ member.name }}</td>
-            <td data-label="功能" class="is-center has-text-centered">
-              <button type="button" class="button mr-0-5 is-primary is-outlined fas fa-pen"
+            <td data-label="功能" class="has-text-centered">
+              <button type="button" class="button is-primary is-outlined fas fa-pen"
                       @click.prevent='showDialogToEditMember(member)'>
               </button>
               <button type="button" class="button is-danger is-outlined fas fa-trash"
@@ -52,14 +52,14 @@
               aria-role="dialog"
               aria-modal>
         <div class="modal-card">
-          <header class="modal-card-head padding-0-8">
-            <p class="modal-card-title text-bold">新增成員</p>
+          <header class="modal-card-head p-0-8">
+            <p class="modal-card-title has-text-weight-bold">新增成員</p>
           </header>
           <section class="modal-card-body">
-            <b-field label="名字" class='is-left'>
+            <b-field label="名字" class='has-text-left'>
               <b-input v-model="curMember.name" required></b-input>
             </b-field>
-            <b-field label="官品" class='is-left'>
+            <b-field label="官品" class='has-text-left'>
               <b-dropdown
                 v-model.number="curMember.grade"
                 aria-role="list"
@@ -82,11 +82,11 @@
                 </b-dropdown-item>
               </b-dropdown>
             </b-field>
-            <div class="field is-left" style='padding-top: 0.8rem'>
+            <div class="field has-text-left" style='padding-top: 0.8rem'>
                 <b-checkbox v-model="curMember.beTeacher">是否可以開桌</b-checkbox>
             </div>
           </section>
-          <footer class="modal-card-foot flex-sb padding-0-8">
+          <footer class="modal-card-foot flex-rsbc p-0-8">
             <button class="button" type="button" @click.prevent="cancel">取消</button>
             <button class="button is-primary"
                     v-if='isCreate' @click.prevent='createMember(curMember)'>
@@ -146,34 +146,13 @@ export default {
 </script>
 
 <style lang='scss'>
+@import '@/styles/gw-utilities.scss';
+
+// overwrite table css of buefy
 .table {
   margin: 0 auto;
 }
 .table th, .table td {
   vertical-align: middle;
-}
-.is-left {
-  text-align: left;
-}
-.is-center {
-  text-align: center !important;
-}
-.flex-sb {
-  justify-content: space-between;
-}
-.mr-0-5 {
-  margin-right: 0.5rem;
-}
-.text-bold {
-  font-weight: bold;
-}
-.padding-0-8 {
-  padding: 0.8rem;
-}
-.space-top {
-  margin-top: 1rem;
-}
-.space-bottom {
-  margin-bottom: 1rem;
 }
 </style>
