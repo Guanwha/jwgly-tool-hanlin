@@ -82,6 +82,7 @@ export default new Vuex.Store({
       // delete member
       const refMember = firebase.database().ref(`/members/${willDeleteMember.id}`);
       refMember.remove();
+      context.commit('SHOWHIDE_DIALOG', false);
       this.dispatch('getMembers');
       this.dispatch('success', '成員已刪除');
     },

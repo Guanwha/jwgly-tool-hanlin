@@ -9,16 +9,16 @@
       <table class="table is-striped is-narrow is-hoverable">
         <thead>
           <tr>
-            <th class style="width: 4rem;">
+            <th style="width: 4rem;">
               <div class="th-wrap has-text-centered">可開</div>
             </th>
-            <th class style="width: 4rem;">
+            <th style="width: 4rem;">
               <div class="th-wrap has-text-centered">官品</div>
             </th>
-            <th>
+            <th style="min-width: 4rem;">
               <div class="th-wrap has-text-centered">名字</div>
             </th>
-            <th class style="width: 10rem;">
+            <th style="width: 4rem;">
               <div class="th-wrap has-text-centered">功能</div>
             </th>
           </tr>
@@ -34,9 +34,6 @@
             <td data-label="功能" class="has-text-centered">
               <button type="button" class="button is-primary is-outlined fas fa-pen"
                       @click.prevent='showDialogToEditMember(member)'>
-              </button>
-              <button type="button" class="button is-danger is-outlined fas fa-trash"
-                      @click.prevent='deleteMember(member)'>
               </button>
             </td>
           </tr>
@@ -88,12 +85,18 @@
           </section>
           <footer class="modal-card-foot flex-rsbc p-0-8">
             <button class="button" type="button" @click.prevent="cancel">取消</button>
+            <button type="button" class="button is-danger is-outlined fas fa-trash"
+                    v-if='!isCreate'
+                    @click.prevent='deleteMember(curMember)'>
+            </button>
             <button class="button is-primary"
-                    v-if='isCreate' @click.prevent='createMember(curMember)'>
+                    v-if='isCreate'
+                    @click.prevent='createMember(curMember)'>
               新增
             </button>
             <button class="button is-primary"
-                    v-else @click.prevent='updateMember(curMember)'>
+                    v-else
+                    @click.prevent='updateMember(curMember)'>
               更新
             </button>
           </footer>
