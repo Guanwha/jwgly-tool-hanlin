@@ -1,5 +1,6 @@
 <template>
   <section>
+    <loading :active.sync="isLoading"></loading>
     <b-tabs type="is-boxed" expanded>
       <b-tab-item label="成員" icon="users"><TabMembers/></b-tab-item>
       <b-tab-item label="讀書前" icon="clipboard-list"><TabReadingBefore/></b-tab-item>
@@ -9,22 +10,28 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex';
+import { mapActions, mapGetters } from 'vuex';
 import TabMembers from '@/components/TabMembers.vue';
 import TabReadingBefore from '@/components/TabReadingBefore.vue';
 import TabReading from '@/components/TabReading.vue';
+import Loading from 'vue-loading-overlay';
+import 'vue-loading-overlay/dist/vue-loading.css';
 
 export default {
   components: {
     TabMembers,
     TabReadingBefore,
     TabReading,
+    Loading,
   },
   created() {
     this.getMembers();
   },
   methods: {
     ...mapActions(['getMembers']),
+  },
+  computed: {
+    ...mapGetters(['isLoading']),
   },
 };
 </script>
