@@ -160,7 +160,7 @@ export default {
     ]),
   },
   computed: {
-    ...mapGetters(['readingSetupStatus', 'members', 'membersNeedRead', 'membersInClass']),
+    ...mapGetters(['members', 'membersNeedRead', 'membersInClass']),
   },
 };
 </script>
