@@ -12,6 +12,9 @@ export default new Vuex.Store({
     showDialog: false,
     /** reading setup status */
     readingSetupStatus: 1, // 0: 未設定/未讀,  1: 設定已讀,  2: 設定未下課
+    /** reading process */
+    membersNeedRead: [],
+    membersInClass: [],
   },
   actions: {
     /** access firebase */
@@ -86,6 +89,21 @@ export default new Vuex.Store({
       context.commit('SHOWHIDE_DIALOG', false);
     },
     /** reading setup status */
+    resetReadingStatus(context) {
+      // prepare firebase link
+      const refMembers = firebase.database().ref('/members/');
+      // update to firebase
+      context.state.members.forEach((member) => {
+        const curMember = { ...member };
+        const curID = curMember.id;
+        if (curMember.readingStatus !== 0) {
+          delete curMember.id;
+          curMember.readingStatus = 0; // 設定為未讀
+          refMembers.child(`${curID}`).set(curMember);
+        }
+      });
+      this.dispatch('getMembers');
+    },
     switchReadingSetupOperation(context) {
       if (context.state.readingSetupStatus === 1) {
         context.commit('SET_READING_SETUP_STATUS', 2);
@@ -118,6 +136,49 @@ export default new Vuex.Store({
       refMember.set(member);
       this.dispatch('getMembers');
       this.dispatch('success', '切換成員讀書狀態成功');
+    },
+    /** reading setup status */
+    finishReadingStatus(context, ids) {
+      // prepare firebase link
+      const refMembers = firebase.database().ref('/members/');
+      // update to firebase
+      ids.forEach((id) => {
+        const curMember = { ...context.state.members.find((member) => (member.id === id)) };
+        delete curMember.id;
+        curMember.readingStatus = 1; // 設定為已讀
+        refMembers.child(`${id}`).set(curMember);
+      });
+      this.dispatch('getMembers');
+      this.dispatch('success', '設定部分成員為已讀');
+    },
+    finishClassStatus(context, ids) {
+      // prepare firebase link
+      const refMembers = firebase.database().ref('/members/');
+      // update to firebase
+      ids.forEach((id) => {
+        const curMember = { ...context.state.members.find((member) => (member.id === id)) };
+        delete curMember.id;
+        curMember.readingStatus = 0; // 設定為未讀
+        refMembers.child(`${id}`).set(curMember);
+      });
+      this.dispatch('getMembers');
+      this.dispatch('success', '設定部分成員為未讀');
+    },
+    finishAllClassStatus(context) {
+      // prepare firebase link
+      const refMembers = firebase.database().ref('/members/');
+      // update to firebase
+      context.state.members.forEach((member) => {
+        const curMember = { ...member };
+        const curID = curMember.id;
+        if (curMember.readingStatus === 2) {
+          delete curMember.id;
+          curMember.readingStatus = 0; // 設定為未讀
+          refMembers.child(`${curID}`).set(curMember);
+        }
+      });
+      this.dispatch('getMembers');
+      this.dispatch('success', '設定所有未下課成員為未讀');
     },
     /** toast */
     success(context, msg) {
@@ -156,6 +217,25 @@ export default new Vuex.Store({
     showDialog(state) { return state.showDialog; },
     /** reading setup status */
     readingSetupStatus(state) { return state.readingSetupStatus; },
+    /** reading process */
+    membersNeedRead(state) {
+      const filteredMembers = [];
+      state.members.forEach((element) => {
+        if (!element.readingStatus || element.readingStatus === 0) {
+          filteredMembers.push(element);
+        }
+      });
+      return filteredMembers;
+    },
+    membersInClass(state) {
+      const filteredMembers = [];
+      state.members.forEach((element) => {
+        if (element.readingStatus === 2) {
+          filteredMembers.push(element);
+        }
+      });
+      return filteredMembers;
+    },
   },
   modules: {
   },
