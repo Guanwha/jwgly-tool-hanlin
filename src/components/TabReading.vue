@@ -55,6 +55,7 @@ export default {
   data() {
     return {
       grades,
+      preGrade: 0,
       haveReadList: [], // these members have read
       needReadList: [], // these members is after class
     };
@@ -102,8 +103,10 @@ export default {
 
         // list 未讀＋可開桌
         msg += '老師：';
+        this.preGrade = 0;
         this.members.forEach((member) => {
           if (!member.readingStatus && member.beTeacher) {
+            msg = this.updateGradeForMessage(msg, member.grade);
             msg += `${member.name}, `;
           }
         });
@@ -111,8 +114,10 @@ export default {
 
         // list 未讀＋不開桌
         msg += '學生：';
+        this.preGrade = 0;
         this.members.forEach((member) => {
           if (!member.readingStatus && !member.beTeacher) {
+            msg = this.updateGradeForMessage(msg, member.grade);
             msg += `${member.name}, `;
           }
         });
@@ -123,8 +128,10 @@ export default {
 
         // list 未下課＋可開桌
         msg += '老師：';
+        this.preGrade = 0;
         this.members.forEach((member) => {
           if (member.readingStatus === 2 && member.beTeacher) {
+            msg = this.updateGradeForMessage(msg, member.grade);
             msg += `${member.name}, `;
           }
         });
@@ -132,8 +139,10 @@ export default {
 
         // list 未讀＋不開桌
         msg += '學生：';
+        this.preGrade = 0;
         this.members.forEach((member) => {
           if (member.readingStatus === 2 && !member.beTeacher) {
+            msg = this.updateGradeForMessage(msg, member.grade);
             msg += `${member.name}, `;
           }
         });
@@ -148,6 +157,15 @@ export default {
         /* clipboard write failed */
         this.danger('複製 失敗');
       });
+    },
+    updateGradeForMessage(msg, curGrade) {
+      let newMsg = msg;
+      this.preGrade = (this.preGrade === 0) ? curGrade : this.preGrade;
+      if (this.preGrade !== curGrade) {
+        newMsg += '// ';
+        this.preGrade = curGrade;
+      }
+      return newMsg;
     },
     ...mapActions([
       'switchReadingSetupOperation',
