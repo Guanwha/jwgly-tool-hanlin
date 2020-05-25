@@ -140,6 +140,12 @@ export default new Vuex.Store({
     },
     /** reading setup status */
     finishReadingStatus(context, ids) {
+      // check length
+      if (ids.length === 0) {
+        this.dispatch('danger', '請先選擇已讀人員');
+        return;
+      }
+
       // prepare firebase link
       const refMembers = firebase.database().ref('/members/');
       // update to firebase
@@ -153,6 +159,12 @@ export default new Vuex.Store({
       this.dispatch('success', '設定部分成員為已讀');
     },
     finishClassStatus(context, ids) {
+      // check length
+      if (ids.length === 0) {
+        this.dispatch('danger', '請先選擇下課人員');
+        return;
+      }
+
       // prepare firebase link
       const refMembers = firebase.database().ref('/members/');
       // update to firebase
