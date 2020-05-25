@@ -159,9 +159,9 @@ export default {
       navigator.clipboard.writeText(msg).then(() => {
         /* clipboard successfully set */
         this.success('複製 成功');
-      }, () => {
+      }, (err) => {
         /* clipboard write failed */
-        this.danger('複製 失敗');
+        this.danger(`複製 失敗: ${err}`);
       });
     },
     updateGradeForMessage(msg, curGrade) {
