@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="flex-rsbc">
-      <button class="button space-top space-bottom"
+      <button class="button space-top space-bottom" style='width: 5rem;'
               @click.prevent='resetReadingStatus()'>
           初始化
       </button>
@@ -10,7 +10,7 @@
               @click.prevent='switchReadingSetupOperation()'>
           切換 已讀/未下課
       </button>
-      <button class="button space-top space-bottom"
+      <button class="button space-top space-bottom" style='width: 5rem;'
               @click.prevent='getMembers()'>
           <i class="fas fa-sync"></i>
       </button>
