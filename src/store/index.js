@@ -89,6 +89,21 @@ export default new Vuex.Store({
       context.commit('SHOWHIDE_DIALOG', false);
     },
     /** reading setup status */
+    resetReadingStatus(context) {
+      // prepare firebase link
+      const refMembers = firebase.database().ref('/members/');
+      // update to firebase
+      context.state.members.forEach((member) => {
+        const curMember = { ...member };
+        const curID = curMember.id;
+        if (curMember.readingStatus !== 0) {
+          delete curMember.id;
+          curMember.readingStatus = 0; // 設定為未讀
+          refMembers.child(`${curID}`).set(curMember);
+        }
+      });
+      this.dispatch('getMembers');
+    },
     switchReadingSetupOperation(context) {
       if (context.state.readingSetupStatus === 1) {
         context.commit('SET_READING_SETUP_STATUS', 2);
@@ -153,7 +168,7 @@ export default new Vuex.Store({
       const refMembers = firebase.database().ref('/members/');
       // update to firebase
       context.state.members.forEach((member) => {
-        const curMember = Object.assign(member);
+        const curMember = { ...member };
         const curID = curMember.id;
         if (curMember.readingStatus === 2) {
           delete curMember.id;

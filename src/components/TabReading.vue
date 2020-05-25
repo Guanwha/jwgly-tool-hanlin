@@ -5,7 +5,7 @@
       <div class='is-left has-text-weight-bold'>未讀：</div>
       <button class="button is-dark" @click.prevent='[finishReadingStatus(haveReadList), clearHaveReadList()]'>送出已讀人員</button>
     </div>
-    <ul class='table-reading'>
+    <ul class='table-reading mb-3'>
       <li class="cell" v-for='member in membersNeedRead' :key='member.id'>
         <button class='button text-left' :class="{ 'is-dark': isSelectedInWaitingList(member.id) }"
                 @click.prevent='addToHaveReadList(member.id)'>
@@ -15,7 +15,6 @@
       </li>
     </ul>
     <!-- members in class -->
-    <hr>
     <div class='block-header has-background-white-ter'>
       <div class='is-left has-text-weight-bold'>未下課：</div>
       <div>
@@ -23,7 +22,7 @@
         <button class="button" @click.prevent='[finishClassStatus(needReadList), clearNeedReadList()]'>下課 ⇪</button>
       </div>
     </div>
-    <ul class='table-reading'>
+    <ul class='table-reading mb-3'>
       <li class="cell" v-for='member in membersInClass' :key='member.id'>
         <button class='button text-left' :class="{ 'is-primary': !isSelectedInClassList(member.id) }"
                 @click.prevent='addToNeedReadList(member.id)'>
@@ -90,7 +89,13 @@ export default {
         this.needReadList = [];
       }, 100);
     },
-    ...mapActions(['switchReadingSetupOperation', 'switchReadingStatus', 'finishReadingStatus', 'finishClassStatus', 'finishAllClassStatus']),
+    ...mapActions([
+      'switchReadingSetupOperation',
+      'switchReadingStatus',
+      'finishReadingStatus',
+      'finishClassStatus',
+      'finishAllClassStatus',
+    ]),
   },
   computed: {
     ...mapGetters(['readingSetupStatus', 'members', 'membersNeedRead', 'membersInClass']),
@@ -98,10 +103,9 @@ export default {
 };
 </script>
 
-<style lang='scss'>
-.text-left {
-  justify-content: flex-start !important;
-}
+<style lang='scss' scoped>
+@import '@/styles/gw-utilities.scss';
+
 .block-header {
   padding: 0.5rem;
   margin-bottom: 0.5rem;
@@ -109,12 +113,6 @@ export default {
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-}
-.ml-0-5 {
-  margin-left: 0.5rem;
-}
-.mr-0-5 {
-  margin-right: 0.5rem;
 }
 .table-reading {
   width: 100%;
