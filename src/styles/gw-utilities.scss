@@ -2,9 +2,9 @@
 // flex
 .flex-rsbc {
   display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
+  flex-direction: row !important;
+  justify-content: space-between !important;
+  align-items: center !important;
 }
 .text-left {
   justify-content: flex-start !important;
@@ -17,6 +17,17 @@
 .mr-0-5 {
   margin-right: 0.5rem;
 }
+.mt-1 {
+  margin-top: 1rem;
+}
+.mb-1 {
+  margin-bottom: 1rem;
+}
 .mb-3 {
   margin-bottom: 3rem;
+}
+
+// padding
+.p-0-8 {
+  padding: 0.8rem !important;
 }
