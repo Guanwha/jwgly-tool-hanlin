@@ -2,8 +2,13 @@
   <div>
     <!-- copy to clipboard -->
     <div class='block-header has-background-white-ter'>
-      <div class='is-left has-text-weight-bold'>輸出：</div>
-      <button class="button is-info" @click.prevent='copyMembers'>複製名單</button>
+      <div class='is-left has-text-weight-bold'>功能：</div>
+      <ul>
+        <button class="button is-info mr-0-5" @click.prevent='copyMembers'>複製名單</button>
+        <button class="button space-top space-bottom" @click.prevent='getMembers()'>
+            <i class="fas fa-sync"></i>
+        </button>
+      </ul>
     </div>
     <!-- members in wating list -->
     <div class='block-header has-background-white-ter'>
@@ -168,6 +173,7 @@ export default {
       return newMsg;
     },
     ...mapActions([
+      'getMembers',
       'switchReadingSetupOperation',
       'switchReadingStatus',
       'finishReadingStatus',
