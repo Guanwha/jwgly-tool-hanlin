@@ -1,19 +1,40 @@
 <template>
   <div>
     <!-- copy to clipboard -->
-    <div class='block-header has-background-white-ter'>
-      <div class='is-left has-text-weight-bold'>功能：</div>
-      <ul>
-        <button class="button is-info mr-0-5" @click.prevent='copyMembers'>複製名單</button>
-        <button class="button space-top space-bottom" @click.prevent='getMembers()'>
-            <i class="fas fa-sync"></i>
-        </button>
-      </ul>
-    </div>
+    <b-collapse
+        aria-id="contentIdForA11y2"
+        class="panel"
+        animation="slide"
+        :open.sync="showSetting">
+        <div class='block-header has-background-white-ter'
+             slot="trigger"
+             role="button"
+             aria-controls="contentIdForA11y2">
+          <div class='is-left has-text-weight-bold'>功能：</div>
+          <ul>
+            <button class="button is-info mr-0-5" @click.stop='copyMembers'>複製名單</button>
+            <button class="button space-top space-bottom" @click.stop='[getMembers(), clearHaveReadList(), clearNeedReadList()]'>
+                <i class="fas fa-sync"></i>
+            </button>
+          </ul>
+        </div>
+        <ul>
+          <li class='has-text-left'>
+            <b-switch
+                style='height: 36px;'
+                rounded.number="true"
+                size=""
+                v-model='hasInClass'>{{ switchTextHasInClass }}</b-switch>
+          </li>
+        </ul>
+    </b-collapse>
     <!-- members in wating list -->
     <div class='block-header has-background-white-ter'>
       <div class='is-left has-text-weight-bold'>未讀：</div>
-      <button class="button is-dark" @click.prevent='[finishReadingStatus(haveReadList), clearHaveReadList()]'>送出已讀人員</button>
+      <ul>
+        <button class="button is-info mr-0-5" @click.stop='copyClassMembers'>開桌名單</button>
+        <button class="button is-dark" @click.prevent='[finishReadingStatus(haveReadList), clearHaveReadList()]'>送出已讀人員</button>
+      </ul>
     </div>
     <ul class='table-reading mb-3'>
       <li class="cell" v-for='member in membersNeedRead' :key='member.id'>
@@ -63,6 +84,8 @@ export default {
       preGrade: 0,
       haveReadList: [], // these members have read
       needReadList: [], // these members is after class
+      showSetting: false,
+      hasInClass: true,
     };
   },
   methods: {
@@ -128,7 +151,7 @@ export default {
         });
       }
 
-      if (this.membersInClass.length > 0) {
+      if (this.hasInClass && this.membersInClass.length > 0) {
         msg += '\n\n=== 未下課 ===\n';
 
         // list 未下課＋可開桌
@@ -159,9 +182,38 @@ export default {
       navigator.clipboard.writeText(msg).then(() => {
         /* clipboard successfully set */
         this.success('複製 成功');
-      }, () => {
+      }, (err) => {
         /* clipboard write failed */
-        this.danger('複製 失敗');
+        this.danger(`複製 失敗: ${err}`);
+      });
+    },
+    copyClassMembers() {
+      // prepare message
+      let msg = '';
+      if (this.haveReadList.length === 0) {
+        this.danger('請先選取要開桌的人員');
+        return;
+      }
+      if (this.haveReadList.length > 4) {
+        this.danger('選取超過四個人啦');
+        return;
+      }
+
+      this.haveReadList.forEach((id) => {
+        const curMember = { ...this.members.find((member) => (member.id === id)) };
+        msg += `${curMember.name}, `;
+      });
+
+      // eslint-disable-next-line
+      console.log(msg);
+
+      // send to clipboard
+      navigator.clipboard.writeText(msg).then(() => {
+        /* clipboard successfully set */
+        this.success('複製 成功');
+      }, (err) => {
+        /* clipboard write failed */
+        this.danger(`複製 失敗: ${err}`);
       });
     },
     updateGradeForMessage(msg, curGrade) {
@@ -185,6 +237,9 @@ export default {
     ]),
   },
   computed: {
+    switchTextHasInClass() {
+      return (this.hasInClass) ? '顯示未下課' : '隱藏未下課';
+    },
     ...mapGetters(['members', 'membersNeedRead', 'membersInClass']),
   },
 };
