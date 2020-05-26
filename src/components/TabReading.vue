@@ -31,7 +31,10 @@
     <!-- members in wating list -->
     <div class='block-header has-background-white-ter'>
       <div class='is-left has-text-weight-bold'>未讀：</div>
-      <button class="button is-dark" @click.prevent='[finishReadingStatus(haveReadList), clearHaveReadList()]'>送出已讀人員</button>
+      <ul>
+        <button class="button is-info mr-0-5" @click.stop='copyClassMembers'>開桌名單</button>
+        <button class="button is-dark" @click.prevent='[finishReadingStatus(haveReadList), clearHaveReadList()]'>送出已讀人員</button>
+      </ul>
     </div>
     <ul class='table-reading mb-3'>
       <li class="cell" v-for='member in membersNeedRead' :key='member.id'>
@@ -172,6 +175,35 @@ export default {
           }
         });
       }
+      // eslint-disable-next-line
+      console.log(msg);
+
+      // send to clipboard
+      navigator.clipboard.writeText(msg).then(() => {
+        /* clipboard successfully set */
+        this.success('複製 成功');
+      }, (err) => {
+        /* clipboard write failed */
+        this.danger(`複製 失敗: ${err}`);
+      });
+    },
+    copyClassMembers() {
+      // prepare message
+      let msg = '';
+      if (this.haveReadList.length === 0) {
+        this.danger('請先選取要開桌的人員');
+        return;
+      }
+      if (this.haveReadList.length > 4) {
+        this.danger('選取超過四個人啦');
+        return;
+      }
+
+      this.haveReadList.forEach((id) => {
+        const curMember = { ...this.members.find((member) => (member.id === id)) };
+        msg += `${curMember.name}, `;
+      });
+
       // eslint-disable-next-line
       console.log(msg);
 
