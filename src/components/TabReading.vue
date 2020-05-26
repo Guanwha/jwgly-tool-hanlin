@@ -13,7 +13,7 @@
           <div class='is-left has-text-weight-bold'>功能：</div>
           <ul>
             <button class="button is-info mr-0-5" @click.stop='copyMembers'>複製名單</button>
-            <button class="button space-top space-bottom" @click.stop='getMembers()'>
+            <button class="button space-top space-bottom" @click.stop='[getMembers(), clearHaveReadList(), clearNeedReadList()]'>
                 <i class="fas fa-sync"></i>
             </button>
           </ul>
