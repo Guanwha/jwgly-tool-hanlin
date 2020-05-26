@@ -1,15 +1,33 @@
 <template>
   <div>
     <!-- copy to clipboard -->
-    <div class='block-header has-background-white-ter'>
-      <div class='is-left has-text-weight-bold'>功能：</div>
-      <ul>
-        <button class="button is-info mr-0-5" @click.prevent='copyMembers'>複製名單</button>
-        <button class="button space-top space-bottom" @click.prevent='getMembers()'>
-            <i class="fas fa-sync"></i>
-        </button>
-      </ul>
-    </div>
+    <b-collapse
+        aria-id="contentIdForA11y2"
+        class="panel"
+        animation="slide"
+        :open.sync="showSetting">
+        <div class='block-header has-background-white-ter'
+             slot="trigger"
+             role="button"
+             aria-controls="contentIdForA11y2">
+          <div class='is-left has-text-weight-bold'>功能：</div>
+          <ul>
+            <button class="button is-info mr-0-5" @click.stop='copyMembers'>複製名單</button>
+            <button class="button space-top space-bottom" @click.stop='getMembers()'>
+                <i class="fas fa-sync"></i>
+            </button>
+          </ul>
+        </div>
+        <ul>
+          <li class='has-text-left'>
+            <b-switch
+                style='height: 36px;'
+                rounded.number="true"
+                size=""
+                v-model='hasInClass'>{{ switchTextHasInClass }}</b-switch>
+          </li>
+        </ul>
+    </b-collapse>
     <!-- members in wating list -->
     <div class='block-header has-background-white-ter'>
       <div class='is-left has-text-weight-bold'>未讀：</div>
@@ -63,6 +81,8 @@ export default {
       preGrade: 0,
       haveReadList: [], // these members have read
       needReadList: [], // these members is after class
+      showSetting: false,
+      hasInClass: true,
     };
   },
   methods: {
@@ -128,7 +148,7 @@ export default {
         });
       }
 
-      if (this.membersInClass.length > 0) {
+      if (this.hasInClass && this.membersInClass.length > 0) {
         msg += '\n\n=== 未下課 ===\n';
 
         // list 未下課＋可開桌
@@ -185,6 +205,9 @@ export default {
     ]),
   },
   computed: {
+    switchTextHasInClass() {
+      return (this.hasInClass) ? '顯示未下課' : '隱藏未下課';
+    },
     ...mapGetters(['members', 'membersNeedRead', 'membersInClass']),
   },
 };
