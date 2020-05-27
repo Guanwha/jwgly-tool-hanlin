@@ -11,7 +11,7 @@ export default new Vuex.Store({
     members: [],
     showDialog: false,
     /** reading setup status */
-    readingSetupStatus: 1, // 0: 未設定/未讀,  1: 設定已讀,  2: 設定未下課
+    readingSetupStatus: 1, // 0: 未設定/未讀,  1: 設定已讀,  2: 設定未下課/飛行中
     /** reading process */
     membersNeedRead: [],
     membersInClass: [],
