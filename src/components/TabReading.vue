@@ -33,7 +33,8 @@
       <div class='is-left has-text-weight-bold'>未讀：</div>
       <ul>
         <button class="button is-info mr-0-5" @click.stop='copyClassMembers'>開桌名單</button>
-        <button class="button is-dark" @click.prevent='[finishReadingStatus(haveReadList), clearHaveReadList()]'>送出已讀人員</button>
+        <button class="button is-dark" :disabled='isEmptyHaveReadList'
+                @click.prevent='[finishReadingStatus(haveReadList), clearHaveReadList()]'>送出已讀人員</button>
       </ul>
     </div>
     <ul class='table-reading mb-3'>
@@ -50,7 +51,8 @@
       <div class='is-left has-text-weight-bold'>未下課/飛行中：</div>
       <div>
         <button class="button mr-0-5" @click.prevent='[finishAllClassStatus(), clearNeedReadList()]'>一鍵下課 ⇪</button>
-        <button class="button" @click.prevent='[finishClassStatus(needReadList), clearNeedReadList()]'>下課 ⇪</button>
+        <button class="button" :disabled='isEmptyNeedReadList'
+                @click.prevent='[finishClassStatus(needReadList), clearNeedReadList()]'>下課 ⇪</button>
       </div>
     </div>
     <ul class='table-reading mb-3'>
@@ -260,6 +262,12 @@ export default {
   computed: {
     switchTextHasInClass() {
       return (this.hasInClass) ? '顯示未下課/飛行中' : '隱藏未下課/飛行中';
+    },
+    isEmptyHaveReadList() {
+      return this.haveReadList.length === 0;
+    },
+    isEmptyNeedReadList() {
+      return this.needReadList.length === 0;
     },
     ...mapGetters(['members', 'membersNeedRead', 'membersInClass']),
   },
