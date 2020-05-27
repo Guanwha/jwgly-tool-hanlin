@@ -33,7 +33,8 @@
       <div class='is-left has-text-weight-bold'>未讀：</div>
       <ul>
         <button class="button is-info mr-0-5" @click.stop='copyClassMembers'>開桌名單</button>
-        <button class="button is-dark" @click.prevent='[finishReadingStatus(haveReadList), clearHaveReadList()]'>送出已讀人員</button>
+        <button class="button is-dark" :disabled='isEmptyHaveReadList'
+                @click.prevent='[finishReadingStatus(haveReadList), clearHaveReadList()]'>送出已讀人員</button>
       </ul>
     </div>
     <ul class='table-reading mb-3'>
@@ -47,10 +48,11 @@
     </ul>
     <!-- members in class -->
     <div class='block-header has-background-white-ter'>
-      <div class='is-left has-text-weight-bold'>未下課：</div>
+      <div class='is-left has-text-weight-bold'>未下課/飛行中：</div>
       <div>
         <button class="button mr-0-5" @click.prevent='[finishAllClassStatus(), clearNeedReadList()]'>一鍵下課 ⇪</button>
-        <button class="button" @click.prevent='[finishClassStatus(needReadList), clearNeedReadList()]'>下課 ⇪</button>
+        <button class="button" :disabled='isEmptyNeedReadList'
+                @click.prevent='[finishClassStatus(needReadList), clearNeedReadList()]'>下課 ⇪</button>
       </div>
     </div>
     <ul class='table-reading mb-3'>
@@ -68,7 +70,7 @@
       <div>顏色說明：</div>
       <div><button class='button is-dark'></button><span>已讀</span></div>
       <div><button class='button'></button><span>未讀</span></div>
-      <div><button class='button is-primary'></button><span>未下課</span></div>
+      <div><button class='button is-primary'></button><span>未下課 / 飛行中</span></div>
     </div>
   </div>
 </template>
@@ -126,25 +128,36 @@ export default {
     copyMembers() {
       // prepare message
       let msg = '';
+      let num = 0;
       if (this.membersNeedRead.length > 0) {
         msg += '=== 未讀 ===\n';
 
         // list 未讀＋可開桌
-        msg += '老師：';
+        num = 0;
         this.preGrade = 0;
         this.members.forEach((member) => {
           if (!member.readingStatus && member.beTeacher) {
+            if (num === 0) {
+              msg += '老師：';
+              num += 1;
+            }
             msg = this.updateGradeForMessage(msg, member.grade);
             msg += `${member.name}, `;
           }
         });
-        msg += '\n';
+        if (num > 0) {
+          msg += '\n';
+        }
 
         // list 未讀＋不開桌
-        msg += '學生：';
+        num = 0;
         this.preGrade = 0;
         this.members.forEach((member) => {
           if (!member.readingStatus && !member.beTeacher) {
+            if (num === 0) {
+              msg += '學生：';
+              num += 1;
+            }
             msg = this.updateGradeForMessage(msg, member.grade);
             msg += `${member.name}, `;
           }
@@ -152,24 +165,34 @@ export default {
       }
 
       if (this.hasInClass && this.membersInClass.length > 0) {
-        msg += '\n\n=== 未下課 ===\n';
+        msg += '\n\n=== 未下課/飛行中 ===\n';
 
         // list 未下課＋可開桌
-        msg += '老師：';
+        num = 0;
         this.preGrade = 0;
         this.members.forEach((member) => {
           if (member.readingStatus === 2 && member.beTeacher) {
+            if (num === 0) {
+              msg += '老師：';
+              num += 1;
+            }
             msg = this.updateGradeForMessage(msg, member.grade);
             msg += `${member.name}, `;
           }
         });
-        msg += '\n';
+        if (num > 0) {
+          msg += '\n';
+        }
 
         // list 未讀＋不開桌
-        msg += '學生：';
+        num = 0;
         this.preGrade = 0;
         this.members.forEach((member) => {
           if (member.readingStatus === 2 && !member.beTeacher) {
+            if (num === 0) {
+              msg += '學生：';
+              num += 1;
+            }
             msg = this.updateGradeForMessage(msg, member.grade);
             msg += `${member.name}, `;
           }
@@ -238,7 +261,13 @@ export default {
   },
   computed: {
     switchTextHasInClass() {
-      return (this.hasInClass) ? '顯示未下課' : '隱藏未下課';
+      return (this.hasInClass) ? '顯示未下課/飛行中' : '隱藏未下課/飛行中';
+    },
+    isEmptyHaveReadList() {
+      return this.haveReadList.length === 0;
+    },
+    isEmptyNeedReadList() {
+      return this.needReadList.length === 0;
     },
     ...mapGetters(['members', 'membersNeedRead', 'membersInClass']),
   },
@@ -271,7 +300,6 @@ export default {
   }
 }
 .readme {
-  width: 50%;
   margin: 0 auto;
   div {
     margin: 0.5rem;
