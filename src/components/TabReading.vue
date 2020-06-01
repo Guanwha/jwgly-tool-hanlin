@@ -43,6 +43,7 @@
                 @click.prevent='addToHaveReadList(member.id)'>
           {{ grades[member.grade] }} {{ member.name }}
           <span v-if='member.beTeacher' class='has-text-danger ml-0-5'>可開</span>
+          <span v-if='member.beAlternate' class='has-text-grey-light ml-0-5'>候補</span>
         </button>
       </li>
     </ul>
@@ -61,6 +62,7 @@
                 @click.prevent='addToNeedReadList(member.id)'>
           {{ grades[member.grade] }} {{ member.name }}
           <span v-if='member.beTeacher' class='has-text-danger ml-0-5'>可開</span>
+          <span v-if='member.beAlternate' class='has-text-grey-light ml-0-5'>候補</span>
         </button>
       </li>
     </ul>
