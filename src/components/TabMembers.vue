@@ -12,6 +12,9 @@
             <th style="width: 10%;">
               <div class="th-wrap has-text-centered">可開</div>
             </th>
+            <th style="width: 10%;">
+              <div class="th-wrap has-text-centered">候補</div>
+            </th>
             <th style="width: 20%; min-width: 3rem">
               <div class="th-wrap has-text-centered">官品</div>
             </th>
@@ -28,6 +31,9 @@
               class='flex-center'>
             <td data-label="可開" class="flex-center has-text-centered">
               <b-checkbox style='padding: 0' v-model='member.beTeacher' disabled></b-checkbox>
+            </td>
+            <td data-label="候補" class="flex-center has-text-centered">
+              <b-checkbox style='padding: 0' v-model='member.beAlternate' disabled></b-checkbox>
             </td>
             <td data-label="官品" class="has-text-centered">{{ grades[member.grade] }}</td>
             <td data-label="名字" class="has-text-centered">{{ member.name }}</td>
@@ -82,6 +88,9 @@
             <div class="field has-text-left" style='padding-top: 0.8rem'>
                 <b-checkbox v-model="curMember.beTeacher">是否可以開桌</b-checkbox>
             </div>
+            <div class="field has-text-left" style='padding-top: 0.8rem'>
+                <b-checkbox v-model="curMember.beAlternate">是否為候補</b-checkbox>
+            </div>
           </section>
           <footer class="modal-card-foot flex-rsbc p-0-8">
             <button class="button" type="button" @click.prevent="cancel">取消</button>
@@ -113,6 +122,7 @@ const initMember = {
   name: '',
   grade: 103,
   beTeacher: false,
+  beAlternate: false,
   timestamp: null,
 };
 
@@ -124,6 +134,7 @@ export default {
         name: '',
         grade: 103,
         beTeacher: false,
+        beAlternate: false,
         timestamp: null,
       },
       grades,
