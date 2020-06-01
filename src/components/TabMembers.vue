@@ -9,16 +9,16 @@
       <table class="table is-striped is-narrow is-hoverable">
         <thead>
           <tr>
-            <th style="width: 4rem;">
+            <th style="width: 10%;">
               <div class="th-wrap has-text-centered">可開</div>
             </th>
-            <th style="width: 4rem;">
+            <th style="width: 20%; min-width: 3rem">
               <div class="th-wrap has-text-centered">官品</div>
             </th>
             <th style="min-width: 4rem;">
               <div class="th-wrap has-text-centered">名字</div>
             </th>
-            <th style="width: 4rem;">
+            <th style="width: 10%;">
               <div class="th-wrap has-text-centered">功能</div>
             </th>
           </tr>
@@ -148,7 +148,7 @@ export default {
 };
 </script>
 
-<style lang='scss'>
+<style lang='scss' scoped>
 @import '@/styles/gw-utilities.scss';
 
 // overwrite table css of buefy
@@ -156,6 +156,6 @@ export default {
   margin: 0 auto;
 }
 .table th, .table td {
-  vertical-align: middle;
+  vertical-align: middle !important;
 }
 </style>
