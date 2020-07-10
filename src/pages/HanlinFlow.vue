@@ -6,6 +6,7 @@
       <b-tab-item label="讀書前" icon="clipboard-list"><TabReadingBefore/></b-tab-item>
       <b-tab-item label="讀書中" icon="chalkboard-teacher"><TabReading/></b-tab-item>
     </b-tabs>
+    <div>{{ displayVersion }}</div>
   </section>
 </template>
 
@@ -31,6 +32,9 @@ export default {
     ...mapActions(['getMembers']),
   },
   computed: {
+    displayVersion() {
+      return `v. ${process.env.VUE_APP_VERSION}`;
+    },
     ...mapGetters(['isLoading']),
   },
 };
