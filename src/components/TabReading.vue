@@ -28,6 +28,8 @@
           </li>
         </ul>
     </b-collapse>
+    <!-- last updated time -->
+    <div class="updated-time">最後更新時間：{{ lastUpdatedTime }}</div>
     <!-- members in wating list -->
     <div class='block-header has-background-white-ter'>
       <div class='is-left has-text-weight-bold'>未讀：</div>
@@ -271,7 +273,7 @@ export default {
     isEmptyNeedReadList() {
       return this.needReadList.length === 0;
     },
-    ...mapGetters(['members', 'membersNeedRead', 'membersInClass']),
+    ...mapGetters(['members', 'membersNeedRead', 'membersInClass', 'lastUpdatedTime']),
   },
 };
 </script>
@@ -286,6 +288,10 @@ export default {
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
+}
+.updated-time {
+  @include flex-rrc;
+  @include mt-1;
 }
 .table-reading {
   width: 100%;

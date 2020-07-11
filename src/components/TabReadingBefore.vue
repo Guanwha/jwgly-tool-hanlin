@@ -28,8 +28,10 @@
         </button>
       </div>
     </div>
+    <!-- last updated time -->
+    <div class="updated-time">最後更新時間：{{ lastUpdatedTime }}</div>
     <!-- readme -->
-    <hr>
+    <hr class='mt-0'>
     <div class='readme'>
       <div>顏色說明：</div>
       <div><button class='button is-dark'></button><span>已讀</span></div>
@@ -47,7 +49,7 @@ export default {
     ...mapActions(['getMembers', 'resetReadingStatus', 'switchReadingSetupOperation', 'switchReadingStatus']),
   },
   computed: {
-    ...mapGetters(['readingSetupStatus', 'members']),
+    ...mapGetters(['readingSetupStatus', 'members', 'lastUpdatedTime']),
   },
 };
 </script>
@@ -68,6 +70,10 @@ export default {
       font-weight: bold;
     }
   }
+}
+.updated-time {
+  @include flex-rrc;
+  @include mt-1;
 }
 .readme {
   margin: 0 auto;

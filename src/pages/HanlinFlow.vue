@@ -26,10 +26,12 @@ export default {
     Loading,
   },
   created() {
+    // initialize app
     this.getMembers();
+    this.getLastUpadedTime();
   },
   methods: {
-    ...mapActions(['getMembers']),
+    ...mapActions(['getMembers', 'getLastUpadedTime']),
   },
   computed: {
     displayVersion() {
