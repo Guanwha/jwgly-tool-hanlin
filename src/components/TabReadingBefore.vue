@@ -2,7 +2,7 @@
   <b-tabs type="is-boxed" expanded>
     <b-tab-item label="狀態" icon="clipboard-list"><SubTabSetReadingStatus/></b-tab-item>
     <b-tab-item label="老杜桌" icon="book-medical"><SubTabSetHasRead/></b-tab-item>
-    <b-tab-item label="檢查表" icon="check-square"></b-tab-item>
+    <b-tab-item label="檢查表" icon="check-square"><SubTabSetLocalChecking/></b-tab-item>
   </b-tabs>
 </template>
 
@@ -10,11 +10,13 @@
 import { mapActions, mapGetters } from 'vuex';
 import SubTabSetReadingStatus from './SubTabSetReadingStatus.vue';
 import SubTabSetHasRead from './SubTabSetHasRead.vue';
+import SubTabSetLocalChecking from './SubTabSetLocalChecking.vue';
 
 export default {
   components: {
     SubTabSetReadingStatus,
     SubTabSetHasRead,
+    SubTabSetLocalChecking,
   },
   methods: {
     ...mapActions(['getMembers', 'resetReadingStatus', 'switchReadingSetupOperation', 'switchReadingStatus']),
