@@ -99,7 +99,7 @@ export default new Vuex.Store({
     cancel(context) {
       context.commit('SHOWHIDE_DIALOG', false);
     },
-    /** reading setup status */
+    /** setup reading status in reading before tab */
     resetReadingStatus(context) {
       // prepare firebase link
       const refMembers = firebase.database().ref('/members/');
@@ -150,7 +150,43 @@ export default new Vuex.Store({
       this.dispatch('getMembers');
       this.dispatch('success', '切換成員讀書狀態成功');
     },
-    /** reading setup status */
+    /** setup has read in reading before tab */
+    resetHasRead(context) {
+      // prepare firebase link
+      const refMembers = firebase.database().ref('/members/');
+      // update to firebase
+      context.state.members.forEach((member) => {
+        const curMember = { ...member };
+        const curID = curMember.id;
+        if (curMember.hasRead !== 0) {
+          delete curMember.id;
+          curMember.hasRead = 0; // 設定為未讀
+          refMembers.child(`${curID}`).set(curMember);
+        }
+      });
+      // this.dispatch('renewLastUpadedTime');  // 不更新時間
+      this.dispatch('getMembers');
+    },
+    switchHasRead(context, curMember) {
+      // check exist
+      const index = context.state.members.findIndex((member) => (curMember.id === member.id));
+      if (index < 0) {
+        this.dispatch('danger', '此成員不存在');
+        return;
+      }
+      // switch member's reading status
+      const member = { ...curMember };
+      delete member.id;
+      member.hasRead = (!member.hasRead || member.hasRead === 0) ? 1 : 0;
+
+      // update to firebase
+      const refMember = firebase.database().ref(`/members/${curMember.id}`);
+      refMember.set(member);
+      // this.dispatch('renewLastUpadedTime');  // 不更新時間
+      this.dispatch('getMembers');
+      this.dispatch('success', '切換老杜桌成功');
+    },
+    /** setup reading status in reading tab */
     finishReadingStatus(context, ids) {
       // check length
       if (ids.length === 0) {

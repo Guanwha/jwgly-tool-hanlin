@@ -1,7 +1,7 @@
 <template>
   <b-tabs type="is-boxed" expanded>
     <b-tab-item label="狀態" icon="clipboard-list"><SubTabSetReadingStatus/></b-tab-item>
-    <b-tab-item label="老杜桌" icon="book-medical"></b-tab-item>
+    <b-tab-item label="老杜桌" icon="book-medical"><SubTabSetHasRead/></b-tab-item>
     <b-tab-item label="檢查表" icon="check-square"></b-tab-item>
   </b-tabs>
 </template>
@@ -9,10 +9,12 @@
 <script>
 import { mapActions, mapGetters } from 'vuex';
 import SubTabSetReadingStatus from './SubTabSetReadingStatus.vue';
+import SubTabSetHasRead from './SubTabSetHasRead.vue';
 
 export default {
   components: {
     SubTabSetReadingStatus,
+    SubTabSetHasRead,
   },
   methods: {
     ...mapActions(['getMembers', 'resetReadingStatus', 'switchReadingSetupOperation', 'switchReadingStatus']),
