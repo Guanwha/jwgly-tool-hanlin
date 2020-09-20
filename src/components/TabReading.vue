@@ -41,7 +41,9 @@
     </div>
     <ul class='table-reading mb-3'>
       <li class="cell" v-for='member in membersNeedRead' :key='member.id'>
-        <button class='button text-left' :class="{ 'is-dark': isSelectedInWaitingList(member.id) }"
+        <button class='button text-left'
+                :class="[ isSelectedInWaitingList(member.id) ? 'is-dark' : '',
+                          member.hasRead ? 'hasRead' : '' ]"
                 @click.prevent='addToHaveReadList(member.id)'>
           {{ grades[member.grade] }} {{ member.name }}
           <span v-if='member.beTeacher' class='has-text-danger ml-0-5'>可開</span>
@@ -75,6 +77,7 @@
       <div><button class='button is-dark'></button><span>已讀</span></div>
       <div><button class='button'></button><span>未讀</span></div>
       <div><button class='button is-primary'></button><span>未下課 / 飛行中</span></div>
+      <div><button class='button hasRead'></button><span>已坐過老杜桌</span></div>
     </div>
   </div>
 </template>
@@ -279,6 +282,7 @@ export default {
 </script>
 
 <style lang='scss' scoped>
+@import '@/styles/customBuefy.scss';
 @import '@/styles/gw-utilities.scss';
 
 .block-header {
@@ -317,6 +321,12 @@ export default {
   button {
     width: 30%;
     margin-right: 0.5rem;
+  }
+}
+.hasRead {
+  box-shadow: 0 0 3px 3px $danger inset;
+  &:focus {
+    box-shadow: 0 0 3px 3px $danger inset;
   }
 }
 </style>
