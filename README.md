@@ -5,14 +5,18 @@
 npm install
 ```
 
-### Compiles and hot-reloads for development
+### Compiles and hot-reloads for development (for debug)
 ```
 npm run serve
 ```
 
-### Compiles and minifies for production
+### Upload to gh-pages (for deployment)
 ```
+update version in package.json
+
 npm run build
+git commit -m 'build for gh-pages'
+git subtree push --prefix dist origin gh-pages
 ```
 
 ### Lints and fixes files

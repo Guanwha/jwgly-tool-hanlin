@@ -1,5 +1,11 @@
 
 // flex
+@mixin flex-rrc {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  align-items: center;
+}
 .flex-rsbc {
   display: flex;
   flex-direction: row !important;
@@ -11,11 +17,20 @@
 }
 
 // margin
+@mixin mt-0 {
+  margin-top: 0 !important;
+}
+@mixin mt-1 {
+  margin-top: 1rem;
+}
 .ml-0-5 {
   margin-left: 0.5rem;
 }
 .mr-0-5 {
   margin-right: 0.5rem;
+}
+.mt-0 {
+  @include mt-0;
 }
 .mt-1 {
   margin-top: 1rem;

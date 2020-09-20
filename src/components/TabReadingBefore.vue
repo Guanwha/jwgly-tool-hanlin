@@ -1,53 +1,28 @@
 <template>
-  <div>
-    <div class="flex-rsbc">
-      <button class="button space-top space-bottom" style='width: 5rem;'
-              @click.prevent='resetReadingStatus()'>
-          初始化
-      </button>
-      <button class="button space-top space-bottom"
-              :class="[(readingSetupStatus === 1) ? 'is-dark' : 'is-primary']"
-              @click.prevent='switchReadingSetupOperation()'>
-          切換 已讀/未下課
-      </button>
-      <button class="button space-top space-bottom" style='width: 5rem;'
-              @click.prevent='getMembers()'>
-          <i class="fas fa-sync"></i>
-      </button>
-    </div>
-    <div class='space-bottom' v-if='readingSetupStatus === 1'>請選擇 已讀 人員</div>
-    <div class='space-bottom' v-if='readingSetupStatus === 2'>請選擇 未下課 / 飛行中 人員</div>
-    <!-- read status table -->
-    <div class='table-reading-status'>
-      <div class="cell" v-for='member in members' :key='member.id'>
-        <button class='button'
-                :class="[(!member.readingStatus) ? '' :
-                         (member.readingStatus === 1) ? 'is-dark' : 'is-primary']"
-                @click.prevent='switchReadingStatus(member)'>
-          {{ member.name }}
-        </button>
-      </div>
-    </div>
-    <!-- readme -->
-    <hr>
-    <div class='readme'>
-      <div>顏色說明：</div>
-      <div><button class='button is-dark'></button><span>已讀</span></div>
-      <div><button class='button'></button><span>未讀</span></div>
-      <div><button class='button is-primary'></button><span>未下課 / 飛行中</span></div>
-    </div>
-  </div>
+  <b-tabs type="is-boxed" expanded>
+    <b-tab-item label="狀態" icon="clipboard-list"><SubTabSetReadingStatus/></b-tab-item>
+    <b-tab-item label="老杜桌" icon="book-medical"><SubTabSetHasRead/></b-tab-item>
+    <b-tab-item label="檢查表" icon="check-square"><SubTabSetLocalChecking/></b-tab-item>
+  </b-tabs>
 </template>
 
 <script>
 import { mapActions, mapGetters } from 'vuex';
+import SubTabSetReadingStatus from './SubTabSetReadingStatus.vue';
+import SubTabSetHasRead from './SubTabSetHasRead.vue';
+import SubTabSetLocalChecking from './SubTabSetLocalChecking.vue';
 
 export default {
+  components: {
+    SubTabSetReadingStatus,
+    SubTabSetHasRead,
+    SubTabSetLocalChecking,
+  },
   methods: {
     ...mapActions(['getMembers', 'resetReadingStatus', 'switchReadingSetupOperation', 'switchReadingStatus']),
   },
   computed: {
-    ...mapGetters(['readingSetupStatus', 'members']),
+    ...mapGetters(['readingSetupStatus', 'members', 'lastUpdatedTime']),
   },
 };
 </script>
@@ -68,6 +43,10 @@ export default {
       font-weight: bold;
     }
   }
+}
+.updated-time {
+  @include flex-rrc;
+  @include mt-1;
 }
 .readme {
   margin: 0 auto;
