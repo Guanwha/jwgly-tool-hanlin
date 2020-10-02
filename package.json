@@ -1,6 +1,6 @@
 {
   "name": "jwgly-tool-hanlin",
-  "version": "1.7.20200920.1846",
+  "version": "1.8.20201003.443",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
