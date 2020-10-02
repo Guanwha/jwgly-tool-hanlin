@@ -15,8 +15,11 @@ npm run serve
 update version in package.json
 
 npm run build
+git add .
 git commit -m 'build for gh-pages'
 git subtree push --prefix dist origin gh-pages
+
+add tag
 ```
 
 ### Lints and fixes files

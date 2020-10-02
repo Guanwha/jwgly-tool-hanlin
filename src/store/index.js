@@ -177,7 +177,15 @@ export default new Vuex.Store({
       // switch member's reading status
       const member = { ...curMember };
       delete member.id;
-      member.hasRead = (!member.hasRead || member.hasRead === 0) ? 1 : 0;
+      if (!member.hasRead || member.hasRead === 0) {
+        member.hasRead = 2;
+      }
+      else if (member.hasRead === 2) {
+        member.hasRead = 1;
+      }
+      else {
+        member.hasRead = 0;
+      }
 
       // update to firebase
       const refMember = firebase.database().ref(`/members/${curMember.id}`);
