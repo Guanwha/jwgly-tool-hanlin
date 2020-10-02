@@ -5,7 +5,7 @@
               @click.prevent='resetHasRead()'>
           初始化
       </button>
-      <button class="button space-top space-bottom" style='width: 5rem;'
+      <button class="button space-top space-bottom" style='width: 5rem;' ref="tempFocus"
               @click.prevent='getMembers()'>
           <i class="fas fa-sync"></i>
       </button>
@@ -15,8 +15,8 @@
     <div class='table-reading-status'>
       <div class="cell" v-for='member in members' :key='member.id'>
         <button class='button'
-                :class="[(!member.hasRead) ? '' : 'is-danger']"
-                @click.prevent='switchHasRead(member)'>
+                :class="classBtn(member.hasRead)"
+                @click.prevent='_switchHasRead(member)'>
           {{ member.name }}
         </button>
       </div>
@@ -37,6 +37,17 @@ import { mapActions, mapGetters } from 'vuex';
 
 export default {
   methods: {
+    classBtn(hasReadStatus) {
+      switch (hasReadStatus) {
+        case 1: return 'is-danger';
+        case 2: return 'btn-reserved';
+        default: return '';
+      }
+    },
+    _switchHasRead(member) {
+      this.$refs.tempFocus.focus();
+      this.switchHasRead(member);
+    },
     ...mapActions(['getMembers', 'resetHasRead', 'switchHasRead']),
   },
   computed: {

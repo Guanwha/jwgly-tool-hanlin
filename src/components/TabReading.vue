@@ -33,17 +33,22 @@
     <!-- members in wating list -->
     <div class='block-header has-background-white-ter'>
       <div class='is-left has-text-weight-bold'>未讀：</div>
-      <ul>
-        <button class="button is-info mr-0-5" @click.stop='copyClassMembers'>開桌名單</button>
-        <button class="button is-dark" :disabled='isEmptyHaveReadList'
-                @click.prevent='[finishReadingStatus(haveReadList), clearHaveReadList()]'>送出已讀人員</button>
-      </ul>
+      <div>
+        <div>
+          <button class="button is-info mr-0-5" @click.stop='copyClassMembers'>開桌名單</button>
+          <button class="button is-dark" :disabled='isEmptyHaveReadList'
+                  @click.prevent='[finishReadingStatus(haveReadList), clearHaveReadList()]'>送出已讀人員</button>
+        </div>
+        <div class='flex-rrc'>
+          <button class="button is-danger mt-0-5" @click.stop='copyLouduMembers'>老杜桌名單</button>
+        </div>
+      </div>
     </div>
     <ul class='table-reading mb-3'>
       <li class="cell" v-for='member in membersNeedRead' :key='member.id'>
         <button class='button text-left'
                 :class="[ isSelectedInWaitingList(member.id) ? 'is-dark' : '',
-                          member.hasRead ? 'btn-reserved' : '' ]"
+                          classHasReadBtn(member.hasRead) ]"
                 @click.prevent='addToHaveReadList(member.id)'>
           {{ grades[member.grade] }} {{ member.name }}
           <span v-if='member.beTeacher' class='has-text-danger ml-0-5'>可開</span>
@@ -77,7 +82,7 @@
       <div><button class='button is-dark'></button><span>已讀</span></div>
       <div><button class='button'></button><span>未讀</span></div>
       <div><button class='button is-primary'></button><span>未下課 / 飛行中</span></div>
-      <div><button class='button btn-reserved'></button><span>已坐過老杜桌</span></div>
+      <div><button class='button btn-reserved'></button><span>預定老杜桌</span></div>
     </div>
   </div>
 </template>
@@ -246,6 +251,34 @@ export default {
         this.danger(`複製 失敗: ${err}`);
       });
     },
+    copyLouduMembers() {
+      // prepare message
+      let msg = '';
+      if (this.membersLoudu.length === 0) {
+        this.danger('請先到 讀書前/老杜桌 頁面<br>選取老杜桌的人員');
+        return;
+      }
+      if (this.membersLoudu.length > 3) {
+        this.danger('選取超過三個學生啦(不需要選老杜)');
+        return;
+      }
+
+      this.membersLoudu.forEach((member) => {
+        msg += `${member.name}, `;
+      });
+
+      // eslint-disable-next-line
+      console.log(msg);
+
+      // send to clipboard
+      navigator.clipboard.writeText(msg).then(() => {
+        /* clipboard successfully set */
+        this.success('複製 成功');
+      }, (err) => {
+        /* clipboard write failed */
+        this.danger(`複製 失敗: ${err}`);
+      });
+    },
     updateGradeForMessage(msg, curGrade) {
       let newMsg = msg;
       this.preGrade = (this.preGrade === 0) ? curGrade : this.preGrade;
@@ -254,6 +287,13 @@ export default {
         this.preGrade = curGrade;
       }
       return newMsg;
+    },
+    classHasReadBtn(hasReadStatus) {
+      switch (hasReadStatus) {
+        // case 1: return 'is-danger';
+        case 2: return 'btn-reserved';
+        default: return '';
+      }
     },
     ...mapActions([
       'getMembers',
@@ -275,6 +315,9 @@ export default {
     },
     isEmptyNeedReadList() {
       return this.needReadList.length === 0;
+    },
+    membersLoudu() {
+      return this.membersNeedRead.filter((member) => member.hasRead === 2);
     },
     ...mapGetters(['members', 'membersNeedRead', 'membersInClass', 'lastUpdatedTime']),
   },

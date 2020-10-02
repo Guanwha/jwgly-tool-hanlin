@@ -55,6 +55,12 @@
         {
           "code": 255
         }
+      ],
+      "no-underscore-dangle": [
+        "error",
+        {
+          "allowAfterThis": true
+        }
       ]
     }
   },
