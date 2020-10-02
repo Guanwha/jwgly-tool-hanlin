@@ -26,6 +26,7 @@
     <div class='readme'>
       <div>顏色說明：</div>
       <div><button class='button is-danger'></button><span>已讀老杜桌</span></div>
+      <div><button class='button btn-reserved'></button><span>預定老杜桌</span></div>
       <div><button class='button'></button><span>未讀老杜桌</span></div>
     </div>
   </div>
@@ -46,6 +47,7 @@ export default {
 
 <style lang='scss' scoped>
 @import '@/styles/gw-utilities.scss';
+@import '@/styles/button.scss';
 
 .table-reading-status {
   width: 100%;
