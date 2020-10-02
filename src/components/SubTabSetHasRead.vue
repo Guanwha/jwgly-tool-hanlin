@@ -2,7 +2,7 @@
   <div>
     <div class="flex-rsbc">
       <button class="button space-top space-bottom" style='width: 5rem;'
-              @click.prevent='resetHasRead()'>
+              @click.prevent='confirmReset()'>
           初始化
       </button>
       <button class="button space-top space-bottom" style='width: 5rem;' ref="tempFocus"
@@ -47,6 +47,17 @@ export default {
     _switchHasRead(member) {
       this.$refs.tempFocus.focus();
       this.switchHasRead(member);
+    },
+    confirmReset() {
+      this.$buefy.dialog.confirm({
+        title: '確定要重設老杜桌?',
+        message: '此動作無法復原。',
+        cancelText: '取消',
+        confirmText: '重設',
+        type: 'is-danger',
+        hasIcon: true,
+        onConfirm: () => this.resetHasRead(),
+      });
     },
     ...mapActions(['getMembers', 'resetHasRead', 'switchHasRead']),
   },

@@ -2,7 +2,7 @@
   <div>
     <div class="flex-rsbc">
       <button class="button space-top space-bottom" style='width: 5rem;'
-              @click.prevent='resetReadingStatus()'>
+              @click.prevent='confirmReset()'>
           初始化
       </button>
       <button class="button space-top space-bottom"
@@ -46,6 +46,19 @@ import { mapActions, mapGetters } from 'vuex';
 
 export default {
   methods: {
+    confirmReset() {
+      this.$buefy.dialog.confirm({
+        title: '確定要將全部人員設為未讀?',
+        message: '此動作無法復原。',
+        cancelText: '取消',
+        confirmText: '重設',
+        type: 'is-dark',
+        hasIcon: true,
+        iconPack: 'fa',
+        icon: 'exclamation-circle',
+        onConfirm: () => this.resetReadingStatus(),
+      });
+    },
     ...mapActions(['getMembers', 'resetReadingStatus', 'switchReadingSetupOperation', 'switchReadingStatus']),
   },
   computed: {
